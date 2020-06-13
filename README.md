@@ -37,8 +37,14 @@ Extended language features are available
 
 * [P-371/ASDML](src/VSCodeExtension) (official)
 
-## Parsers For Programming Languages ##
+## Libraries ##
 
 ### C# ###
 
 * [P-371/ASDML.NET](src/ASDML.NET) (official)
+
+## Submission ##
+
+Do you have an idea how to improve ASDML? Do you have an extension for an IDE? Do you have a library in a programming language to manage ASDML? Let me know.
+
+To share it, create a new [submission issue](https://github.com/P-371/ASDML/issues/new?assignees=&labels=&template=submission.md&title=%5BSUBMISSION%5D).

@@ -54,7 +54,7 @@ Group {
 }
 ```
 
-Some objects can have children (for example, a GUI window, arrays, lists, IEnumerable in C#, Iterable in Java).ssssss
+Some objects can have children (for example, a GUI window, arrays, lists, IEnumerable in C#, Iterable in Java).
 
 Groups can have child groups. Child groups have no prefix. A group can have arbitrary number of child groups.
 

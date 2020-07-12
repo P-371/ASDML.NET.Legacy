@@ -2,11 +2,11 @@
 
 ⚠️ This repo is WIP and subject to changes
 
-## Keywords ##
+## Keywords and literals ##
 
 ### The `@` character ###
 
-In *ASDML*, all keywords must be prefixed by the `@` character.
+In ASDML, all keywords must be prefixed by the `@` character.
 
 ### Null literal ###
 
@@ -16,17 +16,21 @@ Null means something has no valid value. In ASDML, the null keyword is `@null`.
 
 There are two logical keywords: `@true` and `@false`.
 
-## Primitive Literals ##
+### Number literals ###
 
-### Logical ###
+Numbers are character sequences matching `^[\+-]?\d+(\.\d+)?([Ee][\+-]\d+)?$` regular expression. Try it on [RegExr](https://regexr.com/56lm8). This means:
 
-See logical literals.
+* An optional `+` or `-` sign, at most one
+* 1 or more digits
+* Optional
+  * Decimal point
+  * 1 or more digits
+* Optional (the previous number multiplied by a positive power of 10)
+  * Letter `E` or `e`
+  * Exactly 1 `+` or `-` sign
+  * 1 or more digits
 
-### Number ###
-
-Numbers are character sequences matching `^[\+-]?\d+(\.\d+)?([Ee][\+-]\d+)?$` regular expression. Try it on [RegExr](https://regexr.com/56lm8).
-
-### Text ###
+### Text literals ###
 
 Text literals can be written between quotation marks: `"Hello"`.
 

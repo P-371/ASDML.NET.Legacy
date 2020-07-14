@@ -40,7 +40,7 @@ Quotation marks can be omitted if the literal:
 * does not begin with the following characters: `@#`
 * cannot be interpreted as a number literal
 
-## Syntax ##
+## Basic syntax ##
 
 ### Groups ###
 
@@ -169,5 +169,70 @@ Window {
   Button {
     .Text "Click me"
   }
+}
+```
+
+### IDs ###
+
+Groups can have IDs to reference them at multiple locations or find them easily. IDs are written after the group name prefixed with a `#`
+
+``` asdml
+Window #win {
+}
+```
+
+Let's create a window and a button. Add the button to the window and also set as the OK button:
+
+``` csharp
+class Window {
+  int Width;
+  int Height;
+  Button OkButton;
+  void Add(Button button);
+}
+class Button {
+  string Text;
+}
+
+Window window = new Window();
+window.Width = 800;
+window.Height = 600;
+Button button = new Button();
+button.Text = "Click me";
+window.Add(button);
+window.OkButton = button;
+```
+
+Give `#ok` ID to the button and reference it at the `OkButton` property:
+
+``` asdml
+Window {
+  .OkButton #ok
+  Button #ok {
+    .Text "Click me"
+  }
+}
+```
+
+The button can also be created at the `OkButton` property and added as nested content. Writing `#ok` as a nested object is perfectly valid:
+
+``` asdml
+Window {
+  .OkButton Button #ok {
+    .Text "Click me"
+  }
+  #ok
+}
+```
+
+The button also can be created outside the window object:
+
+``` asdml
+Window {
+  .OkButton #ok
+  #ok
+}
+Button #ok {
+  .Text "Click me"
 }
 ```

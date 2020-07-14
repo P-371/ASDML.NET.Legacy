@@ -58,7 +58,7 @@ Window {
 }
 ```
 
-### Primitive properties ###
+### Properties ###
 
 Classes have properties. Properties have values. Let's add some properties to the window class:
 
@@ -81,8 +81,6 @@ Window {
   .Height 600
 }
 ```
-
-### Non-primitive properties ###
 
 Classes can have non-primitive properties. Let's add an OK button:
 
@@ -172,7 +170,7 @@ Window {
 }
 ```
 
-### Constructor invocation ###
+### Using constructors ###
 
 ``` csharp
 class Window {

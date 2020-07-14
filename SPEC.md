@@ -207,6 +207,8 @@ Give `#ok` ID to the button and reference it at the `OkButton` property:
 
 ``` asdml
 Window {
+  .Width 800
+  .Height 600
   .OkButton #ok
   Button #ok {
     .Text "Click me"
@@ -218,6 +220,8 @@ The button can also be created at the `OkButton` property and added as nested co
 
 ``` asdml
 Window {
+  .Width 800
+  .Height 600
   .OkButton Button #ok {
     .Text "Click me"
   }
@@ -229,6 +233,8 @@ The button also can be created outside the window object:
 
 ``` asdml
 Window {
+  .Width 800
+  .Height 600
   .OkButton #ok
   #ok
 }

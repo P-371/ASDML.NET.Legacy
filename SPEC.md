@@ -14,7 +14,7 @@ Null means something has no valid value. In ASDML, the null keyword is `@null`.
 
 ### Logical literals ###
 
-There are two logical keywords: `@true` and `@false`.
+In most languages, this is `bool` or `boolean`. There are two logical keywords: `@true` and `@false`.
 
 ### Number literals ###
 
@@ -32,7 +32,7 @@ Numbers are character sequences matching `^[\+-]?\d+(\.\d+)?([Ee][\+-]\d+)?$` re
 
 ### Text literals ###
 
-Text literals can be written between quotation marks: `"Hello"`.
+In most languages, text literals refer to `string`s. Text literals can be written between quotation marks: `"Hello"`.
 
 Quotation marks can be omitted if the literal:
 

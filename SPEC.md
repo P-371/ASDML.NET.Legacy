@@ -172,6 +172,23 @@ Window {
 }
 ```
 
+### Constructor invocation ###
+
+``` csharp
+class Window {
+  Window(int width, int height, string title);
+}
+
+Window window = new Window(800, 600, "Hello world");
+```
+
+Constructor parameters are written after the group name, separated with a comma:
+
+``` asdml
+Window 800,600,"Hello World" {
+}
+```
+
 ### IDs ###
 
 Groups can have IDs to reference them at multiple locations or find them easily. IDs are written after the group name prefixed with a `#`
@@ -240,5 +257,25 @@ Window {
 }
 Button #ok {
   .Text "Click me"
+}
+```
+
+``` csharp
+class Window {
+  Window(int width, int height, string title);
+}
+
+Window window = new Window(800, 600, "Hello world");
+```
+
+IDs can be written before or after constructor:
+
+``` asdml
+Window 800,600,"Hello World" #win {
+}
+```
+
+``` asdml
+Window #win 800,600,"Hello World" {
 }
 ```

@@ -2,6 +2,8 @@
 
 ⚠️ This repo is WIP and subject to changes
 
+The examples are written in a hybrid C#-JavaScript-like language. All members are public.
+
 ## Keywords and primitive literals ##
 
 ### The `@` character ###
@@ -174,7 +176,7 @@ Window {
 
 ``` csharp
 class Window {
-  Window(int width, int height, string title);
+  constructor(int width, int height, string title);
 }
 
 Window window = new Window(800, 600, "Hello world");
@@ -260,7 +262,7 @@ Button #ok {
 
 ``` csharp
 class Window {
-  Window(int width, int height, string title);
+  constructor(int width, int height, string title);
 }
 
 Window window = new Window(800, 600, "Hello world");

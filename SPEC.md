@@ -116,13 +116,22 @@ Window {
 }
 ```
 
-### Nested groups ###
+### Nested content ###
 
 Some objects can have children or items (for example, a GUI window, arrays, lists, IEnumerable in C#, Iterable in Java).
 
-In ASDML, groups can have nested groups. Nested groups have no prefix. A group can have arbitrary number of nested groups. Let's add some controls to the window:
+In ASDML, groups can have nested content (nested objects). Nested objects have no prefix. A group can have arbitrary number of nested objects. Let's create a list and add some objects to it:
 
-```csharp
+``` asdml
+List {
+  "Hello There"
+  "General Kenobi"
+}
+```
+
+Groups can also be added. Let's add some controls to the window:
+
+``` csharp
 class Window {
   int Width;
   int Height;

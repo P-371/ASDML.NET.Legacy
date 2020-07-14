@@ -1,6 +1,15 @@
 
-# Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode
-# Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode
+# Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,dotnetcore
+# Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,dotnetcore
+
+### DotnetCore ###
+# .NET Core build folders
+bin/
+obj/
+
+# Common node modules locations
+/node_modules
+/wwwroot/node_modules
 
 ### VisualStudioCode ###
 .vscode/*
@@ -8,9 +17,10 @@
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+*.code-workspace
 
 ### VisualStudioCode Patch ###
 # Ignore all local history of files
 .history
 
-# End of https://www.toptal.com/developers/gitignore/api/visualstudiocode
+# End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,dotnetcore

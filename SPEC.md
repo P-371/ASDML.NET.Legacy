@@ -40,8 +40,8 @@ In most languages, *text literals* refer to `string`s. *Text literals* can be wr
 
 *Simple text literal*s are *text literals*. They:
 
-* can contain only letters, digits and underscores
-* does not begin with a digit
+* can contain only letters, digits, underscores and periods
+* does not begin with a digit or a period character
 
 *Simple text literal*s does not have quotation marks: `Hello`
 

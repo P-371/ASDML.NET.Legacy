@@ -2,7 +2,7 @@ namespace P371.ASDML.Types
 {
     public class Number : Object<double>
     {
-        public Number(double value) : base(value) { }
+        internal Number(double value) : base(value: value) { }
 
         public static implicit operator Number(double value) => new Number(value: value);
 

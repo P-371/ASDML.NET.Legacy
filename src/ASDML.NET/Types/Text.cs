@@ -2,7 +2,7 @@ namespace P371.ASDML.Types
 {
     public class Text : Object<string>
     {
-        public Text(string value) : base(value) { }
+        internal Text(string value) : base(value: value) { }
 
         public static implicit operator Text(string value) => new Text(value: value);
 

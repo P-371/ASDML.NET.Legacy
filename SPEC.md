@@ -38,20 +38,18 @@ In most languages, *text literals* refer to `string`s. *Text literals* can be wr
 
 #### Simple text literals ####
 
-*Simple text literals* are *text literals* which:
+*Simple text literal*s are *text literals*. They:
 
-* does not contain whitespace character
-* does not contain the following characters: `{}",`
-* does not begin with the following characters: `@#.`
-* cannot be interpreted as a *number literal*
+* can contain only letters, digits and underscores
+* does not begin with a digit
 
-Quotation marks can be omitted from *simple text literals*: `Hello`
+*Simple text literal*s does not have quotation marks: `Hello`
 
 ## Basic syntax ##
 
 ### Groups ###
 
-In ASDML, *group*s refer to objects or classes in programming languages. A *group* name must be a *simple text literal*. By default, curly brackets follow the *group* name. Let's create an empty window class:
+In ASDML, *group*s refer to objects or classes in programming languages. *Group* names must be *simple text literal*s. By default, curly brackets follow the *group* name. Let's create an empty window class:
 
 ``` csharp
 class Window {
@@ -80,7 +78,7 @@ window.Width = 800;
 window.Height = 600;
 ```
 
-In ASDML, *properties* start with a period (`.`) character. Values follow property names after a whitespace character. The `window` object looks like this in ASDML:
+In ASDML, *properties* start with a period (`.`) character. *Property* names must be *simple text literal*s. Values follow property names after a whitespace character. The `window` object looks like this in ASDML:
 
 ``` asdml
 Window {
@@ -197,7 +195,7 @@ Window (800,600,"Hello World") {
 
 ### IDs ###
 
-*Groups* can have *ID*s to reference them at multiple locations or find them easily. *ID*s are written after the group name prefixed with a `#`
+*Groups* can have *ID*s to reference them at multiple locations or find them easily *ID*s must be *simple text literal*s. *ID*s are written after the group name prefixed with a `#`
 
 ``` asdml
 Window #win {

@@ -51,7 +51,7 @@ Quotation marks can be omitted from *simple text literals*: `Hello`
 
 ### Groups ###
 
-In ASDML, *group*s refer to objects or classes in programming languages. By default, curly brackets follow the group name. Let's create an empty window class:
+In ASDML, *group*s refer to objects or classes in programming languages. A *group* name must be a *simple text literal*. By default, curly brackets follow the *group* name. Let's create an empty window class:
 
 ``` csharp
 class Window {
@@ -67,7 +67,7 @@ Window {
 
 ### Properties ###
 
-Classes have properties. Properties have values. Let's add some properties to the window class:
+Classes have *properties*. *Properties* have values. Let's add some *properties* to the window class:
 
 ``` csharp
 class Window {
@@ -80,7 +80,7 @@ window.Width = 800;
 window.Height = 600;
 ```
 
-In ASDML, properties start with a period character. Values follow property names after a whitespace character. The `window` object looks like this in ASDML:
+In ASDML, *properties* start with a period (`.`) character. Values follow property names after a whitespace character. The `window` object looks like this in ASDML:
 
 ``` asdml
 Window {
@@ -89,7 +89,7 @@ Window {
 }
 ```
 
-Classes can have non-primitive properties. Let's add an OK button:
+Classes can have non-primitive *properties*. Let's add an OK button:
 
 ``` csharp
 class Window {
@@ -109,7 +109,7 @@ button.Text = "Click me";
 window.OkButton = button;
 ```
 
-Non-primitive properties are like primitives, but in place of the primitive value, a group is written:
+Non-primitive *properties* are like primitives, but in place of the primitive value, a group is written:
 
 ``` asdml
 Window {
@@ -125,7 +125,7 @@ Window {
 
 Some objects can have children or items (for example, a GUI window, arrays, lists, IEnumerable in C#, Iterable in Java).
 
-In ASDML, groups can have nested content (nested objects). Nested objects have no prefix. A group can have arbitrary number of nested objects. Let's create a list and add some objects to it:
+In ASDML, groups can have nested content (*nested objects*). *Nested objects* have no prefix. A group can have arbitrary number of *nested objects*. Let's create a list and add some objects to it:
 
 ``` asdml
 List {
@@ -135,7 +135,7 @@ List {
 }
 ```
 
-Groups can also be added. Let's add some controls to the window:
+*Groups* can also be added. Let's add some controls to the window:
 
 ``` csharp
 class Window {
@@ -197,7 +197,7 @@ Window (800,600,"Hello World") {
 
 ### IDs ###
 
-Groups can have IDs to reference them at multiple locations or find them easily. IDs are written after the group name prefixed with a `#`
+*Groups* can have *ID*s to reference them at multiple locations or find them easily. *ID*s are written after the group name prefixed with a `#`
 
 ``` asdml
 Window #win {
@@ -226,7 +226,7 @@ window.Add(button);
 window.OkButton = button;
 ```
 
-Give `#ok` ID to the button and reference it at the `OkButton` property:
+Give `#ok` *ID* to the button and reference it at the `OkButton` property:
 
 ``` asdml
 Window {
@@ -239,7 +239,7 @@ Window {
 }
 ```
 
-The button can also be created at the `OkButton` property and added as nested content. Writing `#ok` as a nested object is perfectly valid:
+The button can also be created at the `OkButton` property and added as nested content. Writing `#ok` as a *nested object* is perfectly valid:
 
 ``` asdml
 Window {

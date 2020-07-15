@@ -34,13 +34,18 @@ Numbers are character sequences matching `^[\+-]?\d+(\.\d+)?([Ee][\+-]\d+)?$` re
 
 ### Text literals ###
 
-In most languages, text literals refer to `string`s. Text literals can be written between quotation marks: `"Hello"`.
+In most languages, *text literals* refer to `string`s. *Text literals* can be written between quotation marks: `"Hello"`.
 
-Quotation marks can be omitted if the literal:
+#### Simple text literals ####
+
+*Simple text literals* are *text literals* which:
 
 * does not contain whitespace character
-* does not begin with the following characters: `@#`
-* cannot be interpreted as a number literal
+* does not contain the following characters: `{}",`
+* does not begin with the following characters: `@#.`
+* cannot be interpreted as a *number literal*
+
+Quotation marks can be omitted from *simple text literals*: `Hello`
 
 ## Basic syntax ##
 
@@ -124,7 +129,8 @@ In ASDML, groups can have nested content (nested objects). Nested objects have n
 
 ``` asdml
 List {
-  "Hello There"
+  Hello
+  There
   "General Kenobi"
 }
 ```

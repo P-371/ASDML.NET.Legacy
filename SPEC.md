@@ -188,10 +188,10 @@ class Window {
 Window window = new Window(800, 600, "Hello world");
 ```
 
-Constructor parameters are written after the group name, separated with a comma:
+Constructor *parameters* are written after the group name in parenthesis, separated with commas from each other:
 
 ``` asdml
-Window 800,600,"Hello World" {
+Window (800,600,"Hello World") {
 }
 ```
 
@@ -266,6 +266,8 @@ Button #ok {
 }
 ```
 
+IDs are written after constructor:
+
 ``` csharp
 class Window {
   constructor(int width, int height, string title);
@@ -274,14 +276,7 @@ class Window {
 Window window = new Window(800, 600, "Hello world");
 ```
 
-IDs can be written before or after constructor:
-
 ``` asdml
-Window 800,600,"Hello World" #win {
-}
-```
-
-``` asdml
-Window #win 800,600,"Hello World" {
+Window (800,600,"Hello World") #win {
 }
 ```

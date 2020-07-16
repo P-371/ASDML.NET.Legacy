@@ -176,23 +176,6 @@ Window {
 }
 ```
 
-### Using constructors ###
-
-``` csharp
-class Window {
-  constructor(int width, int height, string title);
-}
-
-Window window = new Window(800, 600, "Hello world");
-```
-
-Constructor *parameters* are written after the group name in parenthesis, separated with commas from each other:
-
-``` asdml
-Window (800,600,"Hello World") {
-}
-```
-
 ### IDs ###
 
 *Groups* can have *ID*s to reference them at multiple locations or find them easily *ID*s must be *simple text literal*s. *ID*s are written after the group name prefixed with a `#`
@@ -264,7 +247,7 @@ Button #ok {
 }
 ```
 
-IDs are written after constructor:
+### Using constructors ###
 
 ``` csharp
 class Window {
@@ -273,6 +256,8 @@ class Window {
 
 Window window = new Window(800, 600, "Hello world");
 ```
+
+Constructor *parameters* are written after the group name in parenthesis, separated with commas from each other. The *ID* can be written after the constructor *parameters*:
 
 ``` asdml
 Window (800,600,"Hello World") #win {

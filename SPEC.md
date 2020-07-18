@@ -45,6 +45,15 @@ In most languages, *text literals* refer to `string`s. *Text literals* can be wr
 
 *Simple text literal*s does not have quotation marks: `Hello`
 
+#### Multiline text literals ####
+
+*Multiline text literal*s are specific *text literal*s can span across multiple lines. These are prefixed by `@` and written between quotation marks:
+
+``` asdml
+@"This is a
+multiline text literal"
+```
+
 ## Basic syntax ##
 
 ### Groups ###

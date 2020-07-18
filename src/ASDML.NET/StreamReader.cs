@@ -11,7 +11,7 @@ namespace P371.ASDML
     {
         private TextReader reader { get; }
 
-        public bool EndOfStream => Peek() == -1;
+        public bool EndOfStream => Peek() == unchecked((char)-1);
 
         public int Line { get; private set; } = 1;
 
@@ -57,7 +57,7 @@ namespace P371.ASDML
             while (true)
             {
                 char peek = Peek();
-                if (peek == -1 || !continueReading(arg: peek))
+                if (EndOfStream || !continueReading(arg: peek))
                 {
                     return (text: builder.ToString(), hit: peek);
                 }

@@ -27,5 +27,7 @@ namespace P371.ASDML.Types
         public override Group Value => this;
 
         public Group(string name) : base(value: null) => Name = name;
+
+        public override string ToString() => GetType().ToString();
     }
 }

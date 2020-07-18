@@ -22,7 +22,7 @@ namespace P371.ASDML.Types
 
         public Dictionary<string, Object> Properties { get; } = new Dictionary<string, Object>();
 
-        public Dictionary<string, Object> NestedContent { get; } = new Dictionary<string, Object>();
+        public List<Object> NestedContent { get; } = new List<Object>();
 
         public override Group Value => this;
 

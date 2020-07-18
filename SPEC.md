@@ -4,11 +4,11 @@
 
 The examples are written in a hybrid C#-JavaScript-like language. All members are public.
 
-## Keywords and primitive literals ##
+## Keywords ##
 
-### The `@` character ###
+In ASDML, all keywords must be prefixed by `@`.
 
-In ASDML, all keywords must be prefixed by the `@` character.
+## Literals ##
 
 ### Null literal ###
 
@@ -22,23 +22,23 @@ In most languages, this is `bool` or `boolean`. There are two logical keywords: 
 
 Numbers are character sequences matching `^[\+-]?\d+(\.\d+)?([Ee][\+-]\d+)?$` regular expression. Try it on [RegExr](https://regexr.com/56lm8). This means:
 
-* An optional `+` or `-` sign, at most one
-* 1 or more digits
+* An optional `+` or `-` sign
+* One or more digits
 * Optional
-  * Decimal point
-  * 1 or more digits
-* Optional (the previous number multiplied by a positive power of 10)
-  * Letter `E` or `e`
-  * Exactly 1 `+` or `-` sign
-  * 1 or more digits
+  * Character `.` (decimal point)
+  * One or more digits
+* Optional (the previous number multiplied by a power of 10)
+  * Character `E` or `e`
+  * One `+` or `-` sign
+  * One or more digits
 
 ### Text literals ###
 
-In most languages, *text literals* refer to `string`s. *Text literals* can be written between quotation marks: `"Hello"`.
+In most languages, *text literal*s refer to `string`s. *Text literal*s are written between quotation marks: `"Hello World"`.
 
 #### Simple text literals ####
 
-*Simple text literal*s are *text literals*. They:
+*Simple text literal*s are *text literal*s. They:
 
 * can contain only letters, digits, underscores and periods
 * does not begin with a digit or a period character
@@ -91,7 +91,7 @@ window.Width = 800;
 window.Height = 600;
 ```
 
-In ASDML, *properties* start with a period (`.`) character. *Property* names must be *simple text literal*s. Values follow property names after a whitespace character. The `window` object looks like this in ASDML:
+In ASDML, *properties* start with a period character. *Property* names must be *simple text literal*s. Values follow property names after a whitespace character. The `window` object looks like this in ASDML:
 
 ``` asdml
 Window {
@@ -191,7 +191,7 @@ Window {
 
 ### IDs ###
 
-*Groups* can have *ID*s to reference them at multiple locations or find them easily *ID*s must be *simple text literal*s. *ID*s are written after the group name prefixed with a `#`
+*Groups* can have *ID*s to reference them at multiple locations or find them easily *ID*s must be *simple text literal*s. *ID*s are written after the group name prefixed by `#`
 
 ``` asdml
 Window #win {
@@ -270,7 +270,7 @@ class Window {
 Window window = new Window(800, 600, "Hello world");
 ```
 
-Constructor *parameters* are written after the group name in parenthesis, separated with commas from each other. The *ID* can be written after the constructor *parameters*:
+Constructor *parameters* are written after the group name in parenthesis, separated with commas from each other. The *ID* are written after the constructor *parameters*:
 
 ``` asdml
 Window (800,600,"Hello World") #win {

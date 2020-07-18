@@ -54,6 +54,10 @@ In most languages, *text literals* refer to `string`s. *Text literals* can be wr
 multiline text literal"
 ```
 
+### Array literals ###
+
+*Array literal*s are collections of objects. The elements of an *array* are written between `[` and `]` characters and separated with commas from each other: `[4,2,42]`
+
 ## Basic syntax ##
 
 ### Groups ###

@@ -15,7 +15,7 @@ namespace P371.ASDML
 
         public int Line { get; private set; } = 1;
 
-        public int Column { get; private set; } = 0;
+        public int Column { get; private set; } = 1;
 
         public StreamReader(Stream stream)
         {
@@ -37,7 +37,7 @@ namespace P371.ASDML
             char read = (char)reader.Read();
             if (read == '\n')
             {
-                Column = 0;
+                Column = 1;
                 Line++;
             }
             else

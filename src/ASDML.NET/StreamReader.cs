@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System;
 using System.Text;
 using System.IO;
@@ -32,6 +33,33 @@ namespace P371.ASDML
             this.reader = reader;
         }
 
+        private void PrepareObjectReading()
+        {
+            SkipWhiteSpaces();
+            if (EndOfStream)
+            {
+                throw new EndOfStreamException();
+            }
+        }
+
+        private string ReadDigits()
+        {
+            StringBuilder builder = new StringBuilder();
+            if (!char.IsDigit(c: Peek()))
+            {
+                UnexpectedCharacter();
+            }
+            do
+            {
+                builder.Append(value: Read());
+            }
+            while (char.IsDigit(c: Peek()));
+            return builder.ToString();
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal void UnexpectedCharacter() => throw new UnexpectedCharacterException(unexpectedChar: Peek(), line: Line, column: Column);
+
         public char Read()
         {
             char read = (char)reader.Read();
@@ -65,7 +93,97 @@ namespace P371.ASDML
             }
         }
 
-        public char Peek() => Peek();
+        public Number ReadNumber()
+        {
+            StringBuilder builder = new StringBuilder();
+            PrepareObjectReading();
+            if (Peek().In('+', '-'))
+            {
+                builder.Append(value: Read()); // sign
+            }
+            builder.Append(value: ReadDigits());
+            if (char.IsWhiteSpace(c: Peek()))
+            {
+                return builder.ToString();
+            }
+            if (!Peek().In('.', 'E', 'e'))
+            {
+                UnexpectedCharacter();
+            }
+            if (Peek() == '.')
+            {
+                builder.Append(value: Read()); // '.'
+                builder.Append(value: ReadDigits());
+            }
+            if (char.IsWhiteSpace(c: Peek()))
+            {
+                return builder.ToString();
+            }
+            if (!Peek().In('E', 'e'))
+            {
+                UnexpectedCharacter();
+            }
+            builder.Append(value: Read()); // 'E' || 'e'
+            if (!Peek().In('+', '-'))
+            {
+                UnexpectedCharacter();
+            }
+            builder.Append(value: Read()); // sign
+            builder.Append(value: ReadDigits());
+            if (!EndOfStream && !char.IsWhiteSpace(c: Peek()))
+            {
+                UnexpectedCharacter();
+            }
+            return builder.ToString();
+        }
+
+        public Text ReadText()
+        {
+            PrepareObjectReading();
+            if (Peek() == '"')
+            {
+                Read(); // Quotation mark
+                var (text, _) = ReadUntil(continueReading: c => c != '"');
+                Read(); // Quotation mark
+                if (!EndOfStream && !char.IsWhiteSpace(c: Peek()))
+                {
+                    UnexpectedCharacter();
+                }
+                return text;
+            }
+            else
+            {
+                return ReadSimpleText();
+            }
+        }
+
+        public SimpleText ReadSimpleText()
+        {
+            PrepareObjectReading();
+            if (!char.IsLetter(c: Peek()) && Peek() != '_')
+            {
+                UnexpectedCharacter();
+            }
+            StringBuilder builder = new StringBuilder();
+            do
+            {
+                builder.Append(value: Read());
+            }
+            while (Peek().In('_', '.') || char.IsLetterOrDigit(c: Peek()));
+            if (!EndOfStream && !char.IsWhiteSpace(c: Peek()))
+            {
+                UnexpectedCharacter();
+            }
+            return builder.ToString();
+        }
+
+        public char Peek() => (char)reader.Peek();
+
+        public bool SkipWhiteSpaces(bool skipLineBreak = true)
+        {
+            ReadUntil(continueReading: c => c == '\n' ? skipLineBreak : char.IsWhiteSpace(c));
+            return Peek() == '\n';
+        }
 
         public void Dispose() => reader.Dispose();
     }

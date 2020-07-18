@@ -26,9 +26,6 @@ namespace P371.ASDML.Types
 
         public override Group Value => this;
 
-        public Group(string name) : base(null)
-        {
-            Name = name;
-        }
+        public Group(string name) : base(value: null) => Name = name;
     }
 }

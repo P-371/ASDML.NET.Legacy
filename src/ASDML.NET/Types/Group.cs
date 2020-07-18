@@ -18,6 +18,8 @@ namespace P371.ASDML.Types
             }
         }
 
+        public List<Object> ConstructorParameters { get; } = new List<Object>();
+
         public Dictionary<string, Object> Properties { get; } = new Dictionary<string, Object>();
 
         public Dictionary<string, Object> NestedContent { get; } = new Dictionary<string, Object>();

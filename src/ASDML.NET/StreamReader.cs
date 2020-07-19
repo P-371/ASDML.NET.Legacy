@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using System;
 using System.Text;
 using System.IO;
@@ -11,6 +10,8 @@ namespace P371.ASDML
     internal class StreamReader : IDisposable
     {
         private TextReader reader { get; }
+
+        internal UnexpectedCharacterException UnexpectedCharacter => new UnexpectedCharacterException(unexpectedChar: Peek(), line: Line, column: Column);
 
         public bool EndOfStream => Peek() == unchecked((char)-1);
 
@@ -47,7 +48,7 @@ namespace P371.ASDML
             StringBuilder builder = new StringBuilder();
             if (!char.IsDigit(c: Peek()))
             {
-                UnexpectedCharacter();
+                throw UnexpectedCharacter;
             }
             do
             {
@@ -56,9 +57,6 @@ namespace P371.ASDML
             while (char.IsDigit(c: Peek()));
             return builder.ToString();
         }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal void UnexpectedCharacter() => throw new UnexpectedCharacterException(unexpectedChar: Peek(), line: Line, column: Column);
 
         public char Read()
         {
@@ -108,7 +106,7 @@ namespace P371.ASDML
             }
             if (!Peek().In('.', 'E', 'e'))
             {
-                UnexpectedCharacter();
+                throw UnexpectedCharacter;
             }
             if (Peek() == '.')
             {
@@ -121,18 +119,18 @@ namespace P371.ASDML
             }
             if (!Peek().In('E', 'e'))
             {
-                UnexpectedCharacter();
+                throw UnexpectedCharacter;
             }
             builder.Append(value: Read()); // 'E' || 'e'
             if (!Peek().In('+', '-'))
             {
-                UnexpectedCharacter();
+                throw UnexpectedCharacter;
             }
             builder.Append(value: Read()); // sign
             builder.Append(value: ReadDigits());
             if (!EndOfStream && !char.IsWhiteSpace(c: Peek()))
             {
-                UnexpectedCharacter();
+                throw UnexpectedCharacter;
             }
             return builder.ToString();
         }
@@ -147,7 +145,7 @@ namespace P371.ASDML
                 Read(); // Quotation mark
                 if (!EndOfStream && !char.IsWhiteSpace(c: Peek()))
                 {
-                    UnexpectedCharacter();
+                    throw UnexpectedCharacter;
                 }
                 return text;
             }
@@ -162,7 +160,7 @@ namespace P371.ASDML
             PrepareObjectReading();
             if (!char.IsLetter(c: Peek()) && Peek() != '_')
             {
-                UnexpectedCharacter();
+                throw UnexpectedCharacter;
             }
             StringBuilder builder = new StringBuilder();
             do
@@ -172,7 +170,7 @@ namespace P371.ASDML
             while (Peek().In('_', '.') || char.IsLetterOrDigit(c: Peek()));
             if (!EndOfStream && !char.IsWhiteSpace(c: Peek()))
             {
-                UnexpectedCharacter();
+                throw UnexpectedCharacter;
             }
             return builder.ToString();
         }

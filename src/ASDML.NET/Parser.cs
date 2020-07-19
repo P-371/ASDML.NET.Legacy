@@ -2,6 +2,7 @@ using System.Text;
 using System.IO;
 using System.Collections.Generic;
 using P371.ASDML.Types;
+using P371.ASDML.Exceptions;
 
 namespace P371.ASDML
 {
@@ -9,6 +10,8 @@ namespace P371.ASDML
     {
         private StreamReader reader;
         private Stack<Group> groupStack;
+
+        internal UnexpectedCharacterException UnexpectedCharacter => reader.UnexpectedCharacter;
 
         internal Parser(StreamReader streamReader) => reader = streamReader;
 
@@ -39,7 +42,7 @@ namespace P371.ASDML
                     }
                     else if (propertyName != null) // Property with no value
                     {
-                        reader.UnexpectedCharacter();
+                        throw UnexpectedCharacter;
                     }
                     propertyName = groupName = null;
                     reader.Read(); // '\n'
@@ -55,7 +58,7 @@ namespace P371.ASDML
                         reader.Read(); // '.'
                         if (reader.Peek() != '_' && !char.IsLetter(c: reader.Peek()))
                         {
-                            reader.UnexpectedCharacter();
+                            throw UnexpectedCharacter;
                         }
                         propertyName = reader.ReadSimpleText();
                         continue;
@@ -65,7 +68,7 @@ namespace P371.ASDML
                     case '{':
                         if (groupName == null)
                         {
-                            reader.UnexpectedCharacter();
+                            throw UnexpectedCharacter;
                         }
                         reader.Read(); // '{'
                         // Todo wait for LF
@@ -84,7 +87,7 @@ namespace P371.ASDML
                         AutoAdd(group: groupStack.Peek(), propertyName: propertyName, value: number);
                         if (!reader.SkipWhiteSpaces(skipLineBreak: false))
                         {
-                            reader.UnexpectedCharacter();
+                            throw UnexpectedCharacter;
                         }
                         break;
                     case '_':
@@ -96,7 +99,7 @@ namespace P371.ASDML
                         AutoAdd(group: groupStack.Peek(), propertyName: propertyName, value: text);
                         break;
                     default:
-                        break; // ¯\_(ツ)_/¯
+                        throw UnexpectedCharacter;
                 }
                 propertyName = groupName = null;
             }

@@ -135,13 +135,17 @@ namespace P371.ASDML
             return builder.ToString();
         }
 
-        public Text ReadText()
+        public Text ReadText(bool multiLine = false)
         {
             PrepareObjectReading();
             if (Peek() == '"')
             {
                 Read(); // Quotation mark
-                var (text, _) = ReadUntil(continueReading: c => c != '"');
+                var (text, hit) = ReadUntil(continueReading: c => c == '\n' ? multiLine : c != '"');
+                if (!multiLine && hit != '"')
+                {
+                    throw UnexpectedCharacter;
+                }
                 Read(); // Quotation mark
                 if (!EndOfStream && !char.IsWhiteSpace(c: Peek()))
                 {

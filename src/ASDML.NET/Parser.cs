@@ -51,6 +51,27 @@ namespace P371.ASDML
                 switch (reader.Peek())
                 {
                     case '@':
+                        reader.Read(); // '@'
+                        if (reader.Peek() == '"') // Multiline text
+                        {
+                            Text text = reader.ReadText(multiLine: true);
+                            AutoAdd(group: groupStack.Peek(), propertyName: propertyName, value: text);
+                        }
+                        else if (reader.Peek().In('t', 'f', 'n')) // Logical / @null
+                        {
+                            var (text, _) = reader.ReadUntil(continueReading: c => !char.IsWhiteSpace(c: c));
+                            AutoAdd(group: groupStack.Peek(), propertyName: propertyName, value: text switch
+                            {
+                                "true" => (Logical)true,
+                                "false" => (Logical)false,
+                                "null" => Object.Null,
+                                _ => throw UnexpectedCharacter
+                            });
+                        }
+                        else
+                        {
+                            throw UnexpectedCharacter;
+                        }
                         break;
                     case '#':
                         break;
@@ -95,8 +116,8 @@ namespace P371.ASDML
                         groupName = reader.ReadSimpleText();
                         continue;
                     case '"': // Text
-                        Text text = reader.ReadText();
-                        AutoAdd(group: groupStack.Peek(), propertyName: propertyName, value: text);
+                        Text singleLineText = reader.ReadText();
+                        AutoAdd(group: groupStack.Peek(), propertyName: propertyName, value: singleLineText);
                         break;
                     default:
                         throw UnexpectedCharacter;

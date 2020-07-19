@@ -1,9 +1,9 @@
 using System;
-using System.Text;
 using System.IO;
-using IOStreamReader = System.IO.StreamReader;
+using System.Text;
 using P371.ASDML.Exceptions;
 using P371.ASDML.Types;
+using IOStreamReader = System.IO.StreamReader;
 
 namespace P371.ASDML
 {

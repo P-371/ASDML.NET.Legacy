@@ -1,14 +1,15 @@
-using System.Text;
-using System.IO;
 using System.Collections.Generic;
-using P371.ASDML.Types;
+using System.IO;
+using System.Text;
 using P371.ASDML.Exceptions;
+using P371.ASDML.Types;
 
 namespace P371.ASDML
 {
     public class Parser
     {
         private StreamReader reader;
+
         private Stack<Group> groupStack;
 
         internal UnexpectedCharacterException UnexpectedCharacter => reader.UnexpectedCharacter;
@@ -34,7 +35,7 @@ namespace P371.ASDML
                 {
                     break;
                 }
-                if (reader.SkipWhiteSpaces(skipLineBreak: false))
+                if (reader.SkipWhiteSpaces(skipLineBreak: false)) // Line break
                 {
                     if (groupName != null)
                     {

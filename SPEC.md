@@ -62,14 +62,16 @@ multiline text literal"
 
 ### Groups ###
 
-In ASDML, *group*s refer to objects or classes in programming languages. *Group* names must be *simple text literal*s. By default, curly brackets follow the *group* name. Let's create an empty window class:
+In ASDML, *group*s refer to objects or classes in programming languages. *Group* names must be *simple text literal*s. The *group* name is followed by `{` . Let's create an empty window class:
 
 ``` csharp
 class Window {
 }
+
+Window window = new Window();
 ```
 
-This class looks like this in ASDML:
+This very basic window looks like this in ASDML:
 
 ``` asdml
 Window {

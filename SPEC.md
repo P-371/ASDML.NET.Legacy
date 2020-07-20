@@ -56,7 +56,17 @@ multiline text literal"
 
 ### Array literals ###
 
-*Array literal*s are collections of objects. The elements of an *array* are written between `[` and `]` characters and separated with commas from each other: `[4,2,42]`
+*Array literal*s are collections of objects. The items of an *array* are written between `[` and `]` characters and separated with whitespace characters from each other: `[4 2 42]`
+
+Arrays can be multiline:
+
+``` asdml
+[
+  4
+  2
+  42
+]
+```
 
 ## Basic syntax ##
 

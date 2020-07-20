@@ -6,7 +6,7 @@ The examples are written in a hybrid C#-JavaScript-like language. All members ar
 
 ## Keywords ##
 
-In ASDML, all keywords must be prefixed by `@`.
+In ASDML, all keywords are prefixed by `@`.
 
 ## Literals ##
 
@@ -103,7 +103,7 @@ window.Width = 800;
 window.Height = 600;
 ```
 
-In ASDML, *properties* start with a period character. *Property* names must be *simple text literal*s. Values follow property names after a whitespace character. The `window` object looks like this in ASDML:
+In ASDML, *properties* start with a period character. *Property* names must be *simple text literal*s. Property names are followed by the property value. The `window` object looks like this in ASDML:
 
 ``` asdml
 Window {
@@ -132,7 +132,7 @@ button.Text = "Click me";
 window.OkButton = button;
 ```
 
-Non-primitive *properties* are like primitives, but in place of the primitive value, a group is written:
+Non-primitive *properties* are like primitives, but in place the primitive value, a *group* is written:
 
 ``` asdml
 Window {
@@ -148,7 +148,7 @@ Window {
 
 Some objects can have children or items (for example, a GUI window, arrays, lists, IEnumerable in C#, Iterable in Java).
 
-In ASDML, groups can have nested content (*nested objects*). *Nested objects* have no prefix. A group can have arbitrary number of *nested objects*. Let's create a list and add some objects to it:
+In ASDML, *group*s can have nested content (*nested objects*). *Nested objects* have no prefix. A *group* can have arbitrary number of *nested objects*. Let's create a list and add some objects to it:
 
 ``` asdml
 List {
@@ -158,7 +158,7 @@ List {
 }
 ```
 
-*Groups* can also be added. Let's add some controls to the window:
+*Group*s can also be added as nested content. Let's add some controls to the window:
 
 ``` csharp
 class Window {
@@ -203,7 +203,7 @@ Window {
 
 ### IDs ###
 
-*Groups* can have *ID*s to reference them at multiple locations or find them easily *ID*s must be *simple text literal*s. *ID*s are written after the group name prefixed by `#`
+*Group*s can have *ID*s to reference them at multiple locations or find them easily. *ID*s must be *simple text literal*s. *ID*s are written after the *group* name prefixed by `#`
 
 ``` asdml
 Window #win {
@@ -272,7 +272,7 @@ Button #ok {
 }
 ```
 
-### Using constructors ###
+### Constructors ###
 
 ``` csharp
 class Window {

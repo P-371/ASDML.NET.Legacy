@@ -272,9 +272,39 @@ class Window {
 Window window = new Window(800, 600, "Hello world");
 ```
 
-Constructor *parameters* are written after the group name in parenthesis, separated with commas from each other. The *ID* are written after the constructor *parameters*:
+Constructor *parameters* are written after the *group* name in parenthesis, separated with whitespace characters from each other. The *ID* can be written after the constructor *parameters*:
 
 ``` asdml
-Window (800,600,"Hello World") #win {
+Window (800 600 "Hello World") #win {
 }
 ```
+
+## Whitespace and tabulation ##
+
+In ASDML, whitespace characters are separator characters. ASDML doesn't care about neither the tabulation nor the amount or kind of whitespace characters. But there are some rules to keep in mind:
+
+| Position                                  | Whitespace character  | Required |
+|-------------------------------------------|-----------------------|----------|
+| After `@`                                 | None                  | -        |
+| Before `[`                                | Any                   | No       |
+| After `[`                                 | Any                   | No       |
+| Before `]`                                | Any                   | No       |
+| After `]`                                 | Any                   | No       |
+| Between array items                       | Any                   | Yes      |
+| After group name                          | Any                   | No       |
+| Before `{`                                | Any                   | No       |
+| After `{`                                 | Any                   | No       |
+| Before `}`                                | Any                   | No       |
+| After `}`                                 | Any                   | No       |
+| After  `.`                                | None                  | -        |
+| Between property name and property value  | Any                   | Yes      |
+| Between nested objects                    | Any                   | Yes      |
+| Between property name and nested objects  | Any                   | Yes      |
+| Between property value and nested objects | Any                   | Yes      |
+| Before `#`                                | Any                   | No       |
+| After  `#`                                | None                  | -        |
+| Before `(`                                | Any                   | No       |
+| After `(`                                 | Any                   | No       |
+| Before `)`                                | Any                   | No       |
+| After `)`                                 | Any                   | No       |
+| Between constructor parameters            | Any                   | Yes      |

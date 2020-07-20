@@ -40,10 +40,10 @@ In most languages, *text literal*s refer to `string`s. *Text literal*s are writt
 
 *Simple text literal*s are *text literal*s. They:
 
-* can contain only letters, digits, underscores and periods
-* does not begin with a digit or a period character
+* can not contain whitespace or the following characters: `"()[]{}`
+* do not begin with a digit or the following characters: `@#+-.`
 
-*Simple text literal*s does not have quotation marks: `Hello`
+*Simple text literal*s do not have quotation marks: `Hello`
 
 #### Multiline text literals ####
 

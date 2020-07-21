@@ -2,7 +2,7 @@ using System;
 
 namespace P371.ASDML.Types
 {
-    public class SimpleText : Text
+    public sealed class SimpleText : Text
     {
         internal SimpleText(string value) : base(value) { }
 

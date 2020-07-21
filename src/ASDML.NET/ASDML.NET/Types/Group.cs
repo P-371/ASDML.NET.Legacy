@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace P371.ASDML.Types
 {
-    public class Group : Object<Group>
+    public sealed class Group : Object<Group>
     {
         private string name;
 

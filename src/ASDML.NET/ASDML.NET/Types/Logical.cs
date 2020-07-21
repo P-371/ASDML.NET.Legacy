@@ -1,6 +1,6 @@
 namespace P371.ASDML.Types
 {
-    public class Logical : Object<bool>
+    public sealed class Logical : Object<bool>
     {
         internal Logical(bool value) : base(value) { }
 

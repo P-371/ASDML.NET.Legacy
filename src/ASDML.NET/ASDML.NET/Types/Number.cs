@@ -2,7 +2,7 @@ using System;
 
 namespace P371.ASDML.Types
 {
-    public class Number : Object<double>
+    public sealed class Number : Object<double>
     {
         public string RawValue { get; }
 

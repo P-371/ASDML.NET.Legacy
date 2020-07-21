@@ -31,23 +31,16 @@ namespace P371.ASDML
             string propertyName = null;
             while (true)
             {
+                Group currentGroup = groupStack.Peek();
+                GroupConstructionStep currentStep = currentGroup.ConstructionStep;
+                reader.SkipWhiteSpaces();
                 if (reader.EndOfStream)
                 {
+                    if (currentGroup.ConstructionStep != Done)
+                    {
+                        throw new EndOfStreamException();
+                    }
                     break;
-                }
-                if (reader.SkipWhiteSpaces(skipLineBreak: false)) // Line break
-                {
-                    if (groupName != null)
-                    {
-                        AutoAdd(group: groupStack.Peek(), propertyName: propertyName, value: (SimpleText)groupName);
-                    }
-                    else if (propertyName != null) // Property with no value
-                    {
-                        throw UnexpectedCharacter;
-                    }
-                    propertyName = groupName = null;
-                    reader.Read(); // '\n'
-                    continue;
                 }
                 switch (reader.Peek())
                 {
@@ -88,15 +81,12 @@ namespace P371.ASDML
                     case ')':
                         break; // Error
                     case '{':
-                        if (groupName == null)
+                        if (currentStep == Done)
                         {
                             throw UnexpectedCharacter;
                         }
                         reader.Read(); // '{'
-                        // Todo wait for LF
-                        Group group = new Group(name: groupName);
-                        AutoAdd(group: groupStack.Peek(), propertyName: propertyName, value: group);
-                        groupStack.Push(group);
+                        currentGroup.ConstructionStep = Done;
                         break;
                     case '}':
                         reader.Read(); // '}'
@@ -108,14 +98,21 @@ namespace P371.ASDML
                         Number number = reader.ReadNumber();
                         AutoAdd(group: groupStack.Peek(), propertyName: propertyName, value: number);
                         if (!reader.SkipWhiteSpaces(skipLineBreak: false))
+                    case var letter when char.IsLetter(letter): // Simple text / group
+                        SimpleText simpleText = reader.ReadSimpleText(currentStep == Constructor);
+                        reader.SkipWhiteSpaces();
+                        if (!reader.EndOfStream)
                         {
-                            throw UnexpectedCharacter;
+                            if (reader.Peek().In('(', '#', '{'))
+                        {
+                                Group group = new Group(simpleText);
+                                AutoAdd(currentGroup, propertyName, group);
+                                groupStack.Push(group);
+                                break;
+                            }
                         }
+                        AutoAdd(currentGroup, propertyName, simpleText);
                         break;
-                    case '_':
-                    case var letter when char.IsLetter(c: letter): // Simple text / group
-                        groupName = reader.ReadSimpleText();
-                        continue;
                     case '"': // Text
                         Text singleLineText = reader.ReadText();
                         AutoAdd(group: groupStack.Peek(), propertyName: propertyName, value: singleLineText);

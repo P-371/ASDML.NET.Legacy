@@ -1,0 +1,20 @@
+name: NuGet Push
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Publish NuGet
+      uses: brandedoutcast/publish-nuget@v2.5.5
+      with:
+        PROJECT_FILE_PATH: src/ASDML.NET/ASDML.NET
+        NUGET_KEY: ${{secrets.NUGET_API_KEY}}

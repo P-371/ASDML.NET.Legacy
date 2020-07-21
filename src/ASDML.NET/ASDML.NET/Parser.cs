@@ -68,6 +68,14 @@ namespace P371.ASDML
                         }
                         break;
                     case '#':
+                        if (currentStep >= IDDone)
+                        {
+                            throw UnexpectedCharacter;
+                        }
+                        reader.Read(); // '#'
+                        currentGroup.ID = reader.ReadSimpleText(currentStep == Constructor);
+                        currentGroup.ConstructionStep = IDDone;
+                        // TODO Add reference resolve
                         break;
                     case '.': // Property
                         reader.Read(); // '.'

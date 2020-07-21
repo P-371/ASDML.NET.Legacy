@@ -9,6 +9,8 @@ namespace P371.ASDML.Types
 
         internal GroupConstructionStep ConstructionStep = GroupConstructionStep.NameDone;
 
+        public string ID { get; internal set; }
+
         public string Name
         {
             get => name;

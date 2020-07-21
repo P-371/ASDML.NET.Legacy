@@ -3,7 +3,17 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>P371.ASDML</RootNamespace>
+    <AssemblyName>ASDML.NET</AssemblyName>
     <LangVersion>8</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageVersion>1.0.0-alpha</PackageVersion>
+    <PackageId>ASDML.NET</PackageId>
+    <Authors>P-371</Authors>
+    <PackageDescription>ASDML parser for .NET</PackageDescription>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/P-371/ASDML</RepositoryUrl>
   </PropertyGroup>
 
 </Project>

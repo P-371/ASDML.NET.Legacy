@@ -200,11 +200,7 @@ namespace P371.ASDML
 
         public char Peek() => (char)reader.Peek();
 
-        public bool SkipWhiteSpaces(bool skipLineBreak = true)
-        {
-            ReadUntil(continueReading: c => c == '\n' ? skipLineBreak : char.IsWhiteSpace(c));
-            return Peek() == '\n';
-        }
+        public void SkipWhiteSpaces() => ReadUntil(c => char.IsWhiteSpace(c));
 
         public void Dispose() => reader.Dispose();
     }

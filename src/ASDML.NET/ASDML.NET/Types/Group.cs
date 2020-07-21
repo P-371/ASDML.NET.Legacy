@@ -7,6 +7,8 @@ namespace P371.ASDML.Types
     {
         private string name;
 
+        internal GroupConstructionStep ConstructionStep = GroupConstructionStep.NameDone;
+
         public string Name
         {
             get => name;

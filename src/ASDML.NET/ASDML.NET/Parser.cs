@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using P371.ASDML.Exceptions;
 using P371.ASDML.Types;
+using static P371.ASDML.GroupConstructionStep;
 
 namespace P371.ASDML
 {

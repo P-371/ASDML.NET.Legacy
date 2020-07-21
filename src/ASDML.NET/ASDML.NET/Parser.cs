@@ -78,8 +78,21 @@ namespace P371.ASDML
                         propertyName = reader.ReadSimpleText(currentStep == Constructor);
                         continue;
                     case '(':
+                        if (currentStep >= Constructor)
+                        {
+                            throw UnexpectedCharacter;
+                        }
+                        reader.Read(); // '('
+                        currentGroup.ConstructionStep = Constructor;
+                        break;
                     case ')':
-                        break; // Error
+                        if (currentStep != Constructor)
+                        {
+                            throw UnexpectedCharacter;
+                        }
+                        reader.Read(); // ')'
+                        currentGroup.ConstructionStep = ConstructorDone;
+                        break;
                     case '{':
                         if (currentStep == Done)
                         {

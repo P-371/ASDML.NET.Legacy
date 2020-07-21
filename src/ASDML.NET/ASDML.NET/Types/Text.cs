@@ -6,13 +6,15 @@ namespace P371.ASDML.Types
 
         public static bool IsSimple(string text)
         {
-            if (text.Length == 0 || (!char.IsLetter(c: text[index: 0]) && text[index: 0] != '_'))
+            char[] disallowed = { '"', '(', ')', '[', ']', '{', '}' };
+            char[] disallowedFirst = { '@', '#', '+', '-', '.' };
+            if (text.Length == 0 || text[0].In(disallowedFirst) || char.IsWhiteSpace(text[0]))
             {
                 return false;
             }
             for (int i = 1; i < text.Length; i++)
             {
-                if (!char.IsLetterOrDigit(c: text[index: i]) && !text[index: i].In('_', '.'))
+                if (text[i].In(disallowed) || char.IsWhiteSpace(text[i]))
                 {
                     return false;
                 }
@@ -20,7 +22,10 @@ namespace P371.ASDML.Types
             return true;
         }
 
-        public static implicit operator Text(string value) => IsSimple(text: value) ? new SimpleText(value: value) : new Text(value: value);
+        public static bool IsMultiline(string text) => text.Contains("\n");
+
+        public static implicit operator Text(string value)
+            => IsSimple(value) ? new SimpleText(value) : IsMultiline(value) ? new MultiLineText(value) : new Text(value);
 
         public static implicit operator string(Text text) => text.Value;
     }

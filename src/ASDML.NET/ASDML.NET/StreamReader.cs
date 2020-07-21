@@ -152,27 +152,27 @@ namespace P371.ASDML
             return builder.ToString();
         }
 
-        public Text ReadText(bool multiLine = false)
+        public Text ReadText(bool multiLine = false, bool constructor = false)
         {
             PrepareObjectReading();
             if (Peek() == '"')
             {
                 Read(); // Quotation mark
-                var (text, hit) = ReadUntil(continueReading: c => c == '\n' ? multiLine : c != '"');
-                if (!multiLine && hit != '"')
+                var (text, hit) = ReadUntil(c => c == '\n' ? multiLine : c != '"');
+                if (hit != '"')
                 {
-                    throw UnexpectedCharacter;
+                    throw EndOfStream ? new EndOfStreamException() : (Exception)UnexpectedCharacter;
                 }
                 Read(); // Quotation mark
-                if (!EndOfStream && !char.IsWhiteSpace(c: Peek()))
+                if (!constructor || Peek() != ')')
                 {
-                    throw UnexpectedCharacter;
+                    EnsureWhiteSpaceFollows();
                 }
                 return text;
             }
             else
             {
-                return ReadSimpleText();
+                return ReadSimpleText(constructor);
             }
         }
 

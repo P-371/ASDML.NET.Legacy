@@ -119,8 +119,8 @@ namespace P371.ASDML
                         AutoAdd(currentGroup, propertyName, simpleText);
                         break;
                     case '"': // Text
-                        Text singleLineText = reader.ReadText();
-                        AutoAdd(group: groupStack.Peek(), propertyName: propertyName, value: singleLineText);
+                        Text singleLineText = reader.ReadText(currentStep == Constructor);
+                        AutoAdd(currentGroup, propertyName, singleLineText);
                         break;
                     default:
                         throw UnexpectedCharacter;

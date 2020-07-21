@@ -176,10 +176,12 @@ namespace P371.ASDML
             }
         }
 
-        public SimpleText ReadSimpleText()
+        public SimpleText ReadSimpleText(bool constructor = false)
         {
             PrepareObjectReading();
-            if (!char.IsLetter(c: Peek()) && Peek() != '_')
+            char[] disallowed = { '"', '(', ')', '[', ']', '{', '}' };
+            char[] disallowedFirst = { '@', '#', '+', '-', '.' };
+            if (Peek().In(disallowedFirst) || char.IsDigit(Peek()))
             {
                 throw UnexpectedCharacter;
             }
@@ -188,10 +190,10 @@ namespace P371.ASDML
             {
                 builder.Append(Read());
             }
-            while (Peek().In('_', '.') || char.IsLetterOrDigit(c: Peek()));
-            if (!EndOfStream && !char.IsWhiteSpace(c: Peek()))
+            while (!EndOfStream && !Peek().In(disallowed) && !WhiteSpaceNext);
+            if (!constructor || Peek() != ')')
             {
-                throw UnexpectedCharacter;
+                EnsureWhiteSpaceFollows();
             }
             return builder.ToString();
         }

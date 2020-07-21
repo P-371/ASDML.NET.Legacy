@@ -48,19 +48,32 @@ namespace P371.ASDML
                         reader.Read(); // '@'
                         if (reader.Peek() == '"') // Multiline text
                         {
-                            Text text = reader.ReadText(multiLine: true);
-                            AutoAdd(group: groupStack.Peek(), propertyName: propertyName, value: text);
+                            Text text = reader.ReadText(true, currentStep == Constructor);
+                            AutoAdd(currentGroup, propertyName, text);
                         }
                         else if (reader.Peek().In('t', 'f', 'n')) // Logical / @null
                         {
-                            var (text, _) = reader.ReadUntil(continueReading: c => !char.IsWhiteSpace(c: c));
-                            AutoAdd(group: groupStack.Peek(), propertyName: propertyName, value: text switch
+                            var (expectedText, expectedValue) = reader.Peek() switch
                             {
-                                "true" => (Logical)true,
-                                "false" => (Logical)false,
-                                "null" => Object.Null,
-                                _ => throw UnexpectedCharacter
-                            });
+                                't' => ("true", (Logical)true),
+                                'f' => ("false", (Logical)false),
+                                'n' => ("null", null),
+                                _ => throw new InvalidOperationException("This shouldn't have happened. The StreamReader peeked a different character.")
+                            };
+                            int i = 0;
+                            while (!reader.EndOfStream && i < expectedText.Length && reader.Peek() == expectedText[i++])
+                            {
+                                reader.Read();
+                            }
+                            if (reader.EndOfStream && i != expectedText.Length)
+                            {
+                                throw new EndOfStreamException();
+                            }
+                            else if (!reader.EndOfStream && (!char.IsWhiteSpace(reader.Peek()) || (currentStep == Constructor && reader.Peek() != ')')))
+                            {
+                                throw UnexpectedCharacter;
+                            }
+                            AutoAdd(groupStack.Peek(), propertyName, expectedValue);
                         }
                         else
                         {

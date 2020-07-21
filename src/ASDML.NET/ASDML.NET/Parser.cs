@@ -71,11 +71,11 @@ namespace P371.ASDML
                         break;
                     case '.': // Property
                         reader.Read(); // '.'
-                        if (reader.Peek() != '_' && !char.IsLetter(c: reader.Peek()))
+                        if (reader.WhiteSpaceNext || propertyName != null)
                         {
                             throw UnexpectedCharacter;
                         }
-                        propertyName = reader.ReadSimpleText();
+                        propertyName = reader.ReadSimpleText(currentStep == Constructor);
                         continue;
                     case '(':
                     case ')':
@@ -125,7 +125,7 @@ namespace P371.ASDML
                     default:
                         throw UnexpectedCharacter;
                 }
-                propertyName = groupName = null;
+                propertyName = null;
             }
         }
 

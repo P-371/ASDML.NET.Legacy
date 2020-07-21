@@ -4,12 +4,12 @@ namespace P371.ASDML.Types
 {
     public class SimpleText : Text
     {
-        internal SimpleText(string value) : base(value: value) { }
+        internal SimpleText(string value) : base(value) { }
 
         public static implicit operator SimpleText(string value)
-            => IsSimple(text: value)
-            ? new SimpleText(value: value)
-            : throw new ArgumentException(message: "The value is not a simple text literal", paramName: nameof(value));
+            => IsSimple(value)
+            ? new SimpleText(value)
+            : throw new ArgumentException("The value is not a simple text literal", nameof(value));
 
         public static implicit operator string(SimpleText text) => text.Value;
     }

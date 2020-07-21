@@ -16,13 +16,13 @@ namespace P371.ASDML
 
         internal Parser(StreamReader streamReader) => reader = streamReader;
 
-        public Parser(Stream stream) : this(streamReader: new StreamReader(stream: stream)) { }
+        public Parser(Stream stream) : this(new StreamReader(stream)) { }
 
-        public Parser(Stream stream, Encoding encoding) : this(streamReader: new StreamReader(stream: stream, encoding: encoding)) { }
+        public Parser(Stream stream, Encoding encoding) : this(new StreamReader(stream, encoding)) { }
 
-        public Parser(string text) : this(streamReader: new StreamReader(reader: new StringReader(s: text))) { }
+        public Parser(string text) : this(new StreamReader(new StringReader(text))) { }
 
-        public Parser(FileInfo file) : this(streamReader: new StreamReader(reader: File.OpenText(path: file.FullName))) { }
+        public Parser(FileInfo file) : this(new StreamReader(File.OpenText(file.FullName))) { }
 
         public void Parse()
         {

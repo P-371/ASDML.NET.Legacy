@@ -21,12 +21,12 @@ namespace P371.ASDML
 
         public StreamReader(Stream stream)
         {
-            reader = new IOStreamReader(stream: stream);
+            reader = new IOStreamReader(stream);
         }
 
         public StreamReader(Stream stream, Encoding encoding)
         {
-            reader = new IOStreamReader(stream: stream, encoding: encoding);
+            reader = new IOStreamReader(stream, encoding);
         }
 
         public StreamReader(TextReader reader)
@@ -46,15 +46,15 @@ namespace P371.ASDML
         private string ReadDigits()
         {
             StringBuilder builder = new StringBuilder();
-            if (!char.IsDigit(c: Peek()))
+            if (!char.IsDigit(Peek()))
             {
                 throw UnexpectedCharacter;
             }
             do
             {
-                builder.Append(value: Read());
+                builder.Append(Read());
             }
-            while (char.IsDigit(c: Peek()));
+            while (char.IsDigit(Peek()));
             return builder.ToString();
         }
 
@@ -77,17 +77,17 @@ namespace P371.ASDML
         {
             if (continueReading == null)
             {
-                throw new ArgumentNullException(paramName: nameof(continueReading));
+                throw new ArgumentNullException(nameof(continueReading));
             }
             StringBuilder builder = new StringBuilder();
             while (true)
             {
                 char peek = Peek();
-                if (EndOfStream || !continueReading(arg: peek))
+                if (EndOfStream || !continueReading(peek))
                 {
                     return (text: builder.ToString(), hit: peek);
                 }
-                builder.Append(value: Read());
+                builder.Append(Read());
             }
         }
 
@@ -97,7 +97,7 @@ namespace P371.ASDML
             PrepareObjectReading();
             if (Peek().In('+', '-'))
             {
-                builder.Append(value: Read()); // sign
+                builder.Append(Read()); // sign
             }
             builder.Append(value: ReadDigits());
             if (char.IsWhiteSpace(c: Peek()))
@@ -110,8 +110,8 @@ namespace P371.ASDML
             }
             if (Peek() == '.')
             {
-                builder.Append(value: Read()); // '.'
-                builder.Append(value: ReadDigits());
+                builder.Append(Read()); // '.'
+                builder.Append(ReadDigits());
             }
             if (char.IsWhiteSpace(c: Peek()))
             {
@@ -169,7 +169,7 @@ namespace P371.ASDML
             StringBuilder builder = new StringBuilder();
             do
             {
-                builder.Append(value: Read());
+                builder.Append(Read());
             }
             while (Peek().In('_', '.') || char.IsLetterOrDigit(c: Peek()));
             if (!EndOfStream && !char.IsWhiteSpace(c: Peek()))

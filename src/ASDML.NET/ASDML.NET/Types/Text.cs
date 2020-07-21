@@ -2,7 +2,7 @@ namespace P371.ASDML.Types
 {
     public class Text : Object<string>
     {
-        internal Text(string value) : base(value: value) { }
+        internal Text(string value) : base(value) { }
 
         public static bool IsSimple(string text)
         {

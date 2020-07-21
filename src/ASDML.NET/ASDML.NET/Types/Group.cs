@@ -12,9 +12,9 @@ namespace P371.ASDML.Types
             get => name;
             set
             {
-                name = Text.IsSimple(text: value)
+                name = Text.IsSimple(value)
                     ? value
-                    : throw new ArgumentException(message: "The value is not a simple text literal", paramName: nameof(value));
+                    : throw new ArgumentException("The value is not a simple text literal", nameof(value));
             }
         }
 
@@ -26,7 +26,7 @@ namespace P371.ASDML.Types
 
         public override Group Value => this;
 
-        public Group(string name) : base(value: null) => Name = name;
+        public Group(string name) : base(null) => Name = name;
 
         public override string ToString() => GetType().ToString();
     }

@@ -4,14 +4,13 @@ using System.Text;
 using P371.ASDML.Exceptions;
 using P371.ASDML.Types;
 using static P371.ASDML.GroupConstructionStep;
+using InvalidOperationException = System.InvalidOperationException;
 
 namespace P371.ASDML
 {
     public class Parser
     {
         private StreamReader reader;
-
-        private Stack<Group> groupStack;
 
         internal UnexpectedCharacterException UnexpectedCharacter => reader.UnexpectedCharacter;
 
@@ -130,13 +129,23 @@ namespace P371.ASDML
 
         private void AutoAdd(Group group, string propertyName, Object value)
         {
+            switch (group.ConstructionStep)
+            {
+                case Constructor:
+                    group.ConstructorParameters.Add(value);
+                    break;
+                case Done:
             if (propertyName == null)
             {
-                groupStack.Peek().NestedContent.Add(item: value);
+                        group.NestedContent.Add(value);
             }
             else
             {
-                groupStack.Peek().Properties.Add(key: propertyName, value: value);
+                        group.Properties.Add(propertyName, value);
+                    }
+                    break;
+                default:
+                    throw new System.InvalidOperationException();
             }
         }
     }

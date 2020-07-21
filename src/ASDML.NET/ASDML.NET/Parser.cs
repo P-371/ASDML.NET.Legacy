@@ -26,9 +26,9 @@ namespace P371.ASDML
 
         public void Parse()
         {
-            groupStack = new Stack<Group>();
-            groupStack.Push(item: new Group(name: "__TMP_ROOT_GROUP__"));
-            string propertyName = null, groupName = null;
+            Stack<Group> groupStack = new Stack<Group>();
+            groupStack.Push(Group.CreateRoot());
+            string propertyName = null;
             while (true)
             {
                 if (reader.EndOfStream)

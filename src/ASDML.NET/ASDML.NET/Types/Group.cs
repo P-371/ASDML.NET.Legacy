@@ -28,7 +28,11 @@ namespace P371.ASDML.Types
 
         public override Group Value => this;
 
+        private Group() : base(null) { }
+
         public Group(string name) : base(null) => Name = name;
+
+        internal static Group CreateRoot() => new Group { ConstructionStep = GroupConstructionStep.Done };
 
         public override string ToString() => GetType().ToString();
     }

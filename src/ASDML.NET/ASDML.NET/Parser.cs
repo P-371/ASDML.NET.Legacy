@@ -98,10 +98,11 @@ namespace P371.ASDML
                         break;
                     case '+':
                     case '-':
-                    case var digit when char.IsDigit(c: digit): // Number
-                        Number number = reader.ReadNumber();
-                        AutoAdd(group: groupStack.Peek(), propertyName: propertyName, value: number);
-                        if (!reader.SkipWhiteSpaces(skipLineBreak: false))
+                    case var digit when char.IsDigit(digit): // Number
+                        Number number = reader.ReadNumber(currentStep == Constructor);
+                        AutoAdd(currentGroup, propertyName, number);
+                        break;
+                    case '_':
                     case var letter when char.IsLetter(letter): // Simple text / group
                         SimpleText simpleText = reader.ReadSimpleText(currentStep == Constructor);
                         reader.SkipWhiteSpaces();

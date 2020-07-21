@@ -11,7 +11,9 @@ namespace P371.ASDML
     {
         private TextReader reader { get; }
 
-        internal UnexpectedCharacterException UnexpectedCharacter => new UnexpectedCharacterException(unexpectedChar: Peek(), line: Line, column: Column);
+        internal bool WhiteSpaceNext => char.IsWhiteSpace(Peek());
+
+        internal UnexpectedCharacterException UnexpectedCharacter => new UnexpectedCharacterException(Peek(), Line, Column);
 
         public bool EndOfStream => Peek() == unchecked((char)-1);
 
@@ -37,6 +39,19 @@ namespace P371.ASDML
         private void PrepareObjectReading()
         {
             SkipWhiteSpaces();
+            EnsureNotEndOfStream();
+        }
+
+        private void EnsureWhiteSpaceFollows()
+        {
+            if (!EndOfStream && !WhiteSpaceNext)
+            {
+                throw UnexpectedCharacter;
+            }
+        }
+
+        private void EnsureNotEndOfStream()
+        {
             if (EndOfStream)
             {
                 throw new EndOfStreamException();
@@ -45,6 +60,7 @@ namespace P371.ASDML
 
         private string ReadDigits()
         {
+            EnsureNotEndOfStream();
             StringBuilder builder = new StringBuilder();
             if (!char.IsDigit(Peek()))
             {
@@ -91,7 +107,7 @@ namespace P371.ASDML
             }
         }
 
-        public Number ReadNumber()
+        public Number ReadNumber(bool constructor = false)
         {
             StringBuilder builder = new StringBuilder();
             PrepareObjectReading();
@@ -99,8 +115,8 @@ namespace P371.ASDML
             {
                 builder.Append(Read()); // sign
             }
-            builder.Append(value: ReadDigits());
-            if (char.IsWhiteSpace(c: Peek()))
+            builder.Append(ReadDigits());
+            if (EndOfStream || WhiteSpaceNext || (constructor && Peek() == ')'))
             {
                 return builder.ToString();
             }
@@ -113,7 +129,7 @@ namespace P371.ASDML
                 builder.Append(Read()); // '.'
                 builder.Append(ReadDigits());
             }
-            if (char.IsWhiteSpace(c: Peek()))
+            if (EndOfStream || WhiteSpaceNext || (constructor && Peek() == ')'))
             {
                 return builder.ToString();
             }
@@ -121,16 +137,17 @@ namespace P371.ASDML
             {
                 throw UnexpectedCharacter;
             }
-            builder.Append(value: Read()); // 'E' || 'e'
+            builder.Append(Read()); // 'E' || 'e'
+            EnsureNotEndOfStream();
             if (!Peek().In('+', '-'))
             {
                 throw UnexpectedCharacter;
             }
-            builder.Append(value: Read()); // sign
-            builder.Append(value: ReadDigits());
-            if (!EndOfStream && !char.IsWhiteSpace(c: Peek()))
+            builder.Append(Read()); // sign
+            builder.Append(ReadDigits());
+            if (!constructor || Peek() != ')')
             {
-                throw UnexpectedCharacter;
+                EnsureWhiteSpaceFollows();
             }
             return builder.ToString();
         }

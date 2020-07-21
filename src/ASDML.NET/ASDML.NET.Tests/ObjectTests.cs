@@ -11,9 +11,9 @@ namespace P371.ASDML.Tests
             Object asdmlNull = null;
             object csNull = null;
 
-            Assert.Equal<Object>(asdmlNull, (Object)csNull);
-            Assert.Equal<Object>(asdmlNull, (Object<Object>)csNull);
-            Assert.Equal<Object>(asdmlNull, null);
+            Assert.Equal<Object>((Object)csNull, asdmlNull);
+            Assert.Equal<Object>((Object<Object>)csNull, asdmlNull);
+            Assert.Null(asdmlNull);
             Assert.Equal<Object>(asdmlNull, asdmlNull);
         }
     }

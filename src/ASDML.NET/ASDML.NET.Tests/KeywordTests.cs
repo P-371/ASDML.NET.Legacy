@@ -32,10 +32,10 @@ namespace P371.ASDML.Tests
         {
             Parser parser = new Parser("");
             Group group = parser.Parse();
-            Assert.Equal(0, group.NestedContent.Count);
-            Assert.Equal(0, group.Properties.Count);
-            Assert.Equal(0, group.ConstructorParameters.Count);
-            Assert.Equal(null, group.ID);
+            Assert.Empty(group.NestedContent);
+            Assert.Empty(group.Properties);
+            Assert.Empty(group.ConstructorParameters);
+            Assert.Null(group.ID);
         }
 
         [Fact]
@@ -43,10 +43,10 @@ namespace P371.ASDML.Tests
         {
             Parser parser = new Parser(" ");
             Group group = parser.Parse();
-            Assert.Equal(0, group.NestedContent.Count);
-            Assert.Equal(0, group.Properties.Count);
-            Assert.Equal(0, group.ConstructorParameters.Count);
-            Assert.Equal(null, group.ID);
+            Assert.Empty(group.NestedContent);
+            Assert.Empty(group.Properties);
+            Assert.Empty(group.ConstructorParameters);
+            Assert.Null(group.ID);
         }
 
         [Fact]
@@ -54,10 +54,10 @@ namespace P371.ASDML.Tests
         {
             Parser parser = new Parser("\n");
             Group group = parser.Parse();
-            Assert.Equal(0, group.NestedContent.Count);
-            Assert.Equal(0, group.Properties.Count);
-            Assert.Equal(0, group.ConstructorParameters.Count);
-            Assert.Equal(null, group.ID);
+            Assert.Empty(group.NestedContent);
+            Assert.Empty(group.Properties);
+            Assert.Empty(group.ConstructorParameters);
+            Assert.Null(group.ID);
         }
 
         [Fact]
@@ -66,11 +66,11 @@ namespace P371.ASDML.Tests
             Parser parser = new Parser("@null");
             Group group = parser.Parse();
 
-            Assert.Equal(1, group.NestedContent.Count);
-            Assert.Equal(null, group.NestedContent[0]);
-            Assert.Equal(0, group.Properties.Count);
-            Assert.Equal(0, group.ConstructorParameters.Count);
-            Assert.Equal(null, group.ID);
+            Assert.Single(group.NestedContent);
+            Assert.Null(group.NestedContent[0]);
+            Assert.Empty(group.Properties);
+            Assert.Empty(group.ConstructorParameters);
+            Assert.Null(group.ID);
         }
 
         [Fact]
@@ -86,11 +86,11 @@ namespace P371.ASDML.Tests
             Parser parser = new Parser("@false");
             Group group = parser.Parse();
 
-            Assert.Equal(1, group.NestedContent.Count);
+            Assert.Single(group.NestedContent);
             Assert.Equal((Logical)false, group.NestedContent[0]);
-            Assert.Equal(0, group.Properties.Count);
-            Assert.Equal(0, group.ConstructorParameters.Count);
-            Assert.Equal(null, group.ID);
+            Assert.Empty(group.Properties);
+            Assert.Empty(group.ConstructorParameters);
+            Assert.Null(group.ID);
         }
 
         [Fact]
@@ -99,11 +99,11 @@ namespace P371.ASDML.Tests
             Parser parser = new Parser("@true");
             Group group = parser.Parse();
 
-            Assert.Equal(1, group.NestedContent.Count);
+            Assert.Single(group.NestedContent);
             Assert.Equal((Logical)true, group.NestedContent[0]);
-            Assert.Equal(0, group.Properties.Count);
-            Assert.Equal(0, group.ConstructorParameters.Count);
-            Assert.Equal(null, group.ID);
+            Assert.Empty(group.Properties);
+            Assert.Empty(group.ConstructorParameters);
+            Assert.Null(group.ID);
         }
     }
 }

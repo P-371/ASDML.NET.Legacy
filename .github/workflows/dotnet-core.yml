@@ -8,7 +8,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -21,5 +20,11 @@ jobs:
       run: dotnet restore src/ASDML.NET
     - name: Build
       run: dotnet build src/ASDML.NET -c Release --no-restore
+
+  test:
+    runs-on: ubuntu-latest
+    needs: [ build ]
+
+    steps:
     - name: Test
-      run: dotnet test src/ASDML.NET --no-restore --verbosity normal
+      run: dotnet test src/ASDML.NET -c Release --no-restore -v normal

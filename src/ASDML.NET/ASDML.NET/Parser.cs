@@ -89,6 +89,10 @@ namespace P371.ASDML
                         currentGroup.ConstructionStep = Done;
                         break;
                     case '}':
+                        if (propertyName != null || groupStack.Count <= 1)
+                        {
+                            throw UnexpectedCharacter;
+                        }
                         reader.Read(); // '}'
                         groupStack.Pop();
                         break;

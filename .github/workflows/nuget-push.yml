@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  push:
 
     runs-on: ubuntu-latest
 
@@ -16,5 +16,5 @@ jobs:
     - name: Publish NuGet
       uses: brandedoutcast/publish-nuget@v2.5.5
       with:
-        PROJECT_FILE_PATH: src/ASDML.NET/ASDML.NET
+        PROJECT_FILE_PATH: src/ASDML.NET/ASDML.NET/ASDML.NET.csproj
         NUGET_KEY: ${{secrets.NUGET_API_KEY}}

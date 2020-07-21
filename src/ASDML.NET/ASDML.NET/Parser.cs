@@ -24,7 +24,7 @@ namespace P371.ASDML
 
         public Parser(FileInfo file) : this(new StreamReader(File.OpenText(file.FullName))) { }
 
-        public void Parse()
+        public Group Parse()
         {
             Stack<Group> groupStack = new Stack<Group>();
             groupStack.Push(Group.CreateRoot());
@@ -143,7 +143,7 @@ namespace P371.ASDML
                         if (!reader.EndOfStream)
                         {
                             if (reader.Peek().In('(', '#', '{'))
-                        {
+                            {
                                 Group group = new Group(simpleText);
                                 AutoAdd(currentGroup, propertyName, group);
                                 groupStack.Push(group);
@@ -161,6 +161,7 @@ namespace P371.ASDML
                 }
                 propertyName = null;
             }
+            return groupStack.Count == 1 ? groupStack.Pop() : throw new EndOfStreamException();
         }
 
         private void AutoAdd(Group group, string propertyName, Object value)
@@ -171,12 +172,12 @@ namespace P371.ASDML
                     group.ConstructorParameters.Add(value);
                     break;
                 case Done:
-            if (propertyName == null)
-            {
+                    if (propertyName == null)
+                    {
                         group.NestedContent.Add(value);
-            }
-            else
-            {
+                    }
+                    else
+                    {
                         group.Properties.Add(propertyName, value);
                     }
                     break;

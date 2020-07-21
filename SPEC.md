@@ -6,7 +6,7 @@ The examples are written in a hybrid C#-JavaScript-like language. All members ar
 
 ## Keywords ##
 
-In ASDML, all keywords must be prefixed by `@`.
+In ASDML, all keywords are prefixed by `@`.
 
 ## Literals ##
 
@@ -40,10 +40,10 @@ In most languages, *text literal*s refer to `string`s. *Text literal*s are writt
 
 *Simple text literal*s are *text literal*s. They:
 
-* can contain only letters, digits, underscores and periods
-* does not begin with a digit or a period character
+* can not contain whitespace or the following characters: `"()[]{}`
+* do not begin with a digit or the following characters: `@#+-.`
 
-*Simple text literal*s does not have quotation marks: `Hello`
+*Simple text literal*s do not have quotation marks: `Hello`
 
 #### Multiline text literals ####
 
@@ -56,20 +56,32 @@ multiline text literal"
 
 ### Array literals ###
 
-*Array literal*s are collections of objects. The elements of an *array* are written between `[` and `]` characters and separated with commas from each other: `[4,2,42]`
+*Array literal*s are collections of objects. The items of an *array* are written between `[` and `]` characters and separated with whitespace characters from each other: `[4 2 42]`
+
+Arrays can be multiline:
+
+``` asdml
+[
+  4
+  2
+  42
+]
+```
 
 ## Basic syntax ##
 
 ### Groups ###
 
-In ASDML, *group*s refer to objects or classes in programming languages. *Group* names must be *simple text literal*s. By default, curly brackets follow the *group* name. Let's create an empty window class:
+In ASDML, *group*s refer to objects or classes in programming languages. *Group* names must be *simple text literal*s. The *group* name is followed by `{` . Let's create an empty window class:
 
 ``` csharp
 class Window {
 }
+
+Window window = new Window();
 ```
 
-This class looks like this in ASDML:
+This very basic window looks like this in ASDML:
 
 ``` asdml
 Window {
@@ -91,7 +103,7 @@ window.Width = 800;
 window.Height = 600;
 ```
 
-In ASDML, *properties* start with a period character. *Property* names must be *simple text literal*s. Values follow property names after a whitespace character. The `window` object looks like this in ASDML:
+In ASDML, *properties* start with a period character. *Property* names must be *simple text literal*s. Property names are followed by the property value. The `window` object looks like this in ASDML:
 
 ``` asdml
 Window {
@@ -120,7 +132,7 @@ button.Text = "Click me";
 window.OkButton = button;
 ```
 
-Non-primitive *properties* are like primitives, but in place of the primitive value, a group is written:
+Non-primitive *properties* are like primitives, but in place the primitive value, a *group* is written:
 
 ``` asdml
 Window {
@@ -136,7 +148,7 @@ Window {
 
 Some objects can have children or items (for example, a GUI window, arrays, lists, IEnumerable in C#, Iterable in Java).
 
-In ASDML, groups can have nested content (*nested objects*). *Nested objects* have no prefix. A group can have arbitrary number of *nested objects*. Let's create a list and add some objects to it:
+In ASDML, *group*s can have nested content (*nested objects*). *Nested objects* have no prefix. A *group* can have arbitrary number of *nested objects*. Let's create a list and add some objects to it:
 
 ``` asdml
 List {
@@ -146,7 +158,7 @@ List {
 }
 ```
 
-*Groups* can also be added. Let's add some controls to the window:
+*Group*s can also be added as nested content. Let's add some controls to the window:
 
 ``` csharp
 class Window {
@@ -191,7 +203,7 @@ Window {
 
 ### IDs ###
 
-*Groups* can have *ID*s to reference them at multiple locations or find them easily *ID*s must be *simple text literal*s. *ID*s are written after the group name prefixed by `#`
+*Group*s can have *ID*s to reference them at multiple locations or find them easily. *ID*s must be *simple text literal*s. *ID*s are written after the *group* name prefixed by `#`
 
 ``` asdml
 Window #win {
@@ -260,7 +272,7 @@ Button #ok {
 }
 ```
 
-### Using constructors ###
+### Constructors ###
 
 ``` csharp
 class Window {
@@ -270,9 +282,39 @@ class Window {
 Window window = new Window(800, 600, "Hello world");
 ```
 
-Constructor *parameters* are written after the group name in parenthesis, separated with commas from each other. The *ID* are written after the constructor *parameters*:
+Constructor *parameters* are written after the *group* name in parenthesis, separated with whitespace characters from each other. The *ID* can be written after the constructor *parameters*:
 
 ``` asdml
-Window (800,600,"Hello World") #win {
+Window (800 600 "Hello World") #win {
 }
 ```
+
+## Whitespace and tabulation ##
+
+In ASDML, whitespace characters are separator characters. ASDML doesn't care about neither the tabulation nor the amount or kind of whitespace characters. But there are some rules to keep in mind:
+
+| Position                                  | Whitespace character  | Required |
+|-------------------------------------------|-----------------------|----------|
+| After `@`                                 | None                  | -        |
+| Before `[`                                | Any                   | No       |
+| After `[`                                 | Any                   | No       |
+| Before `]`                                | Any                   | No       |
+| After `]`                                 | Any                   | No       |
+| Between array items                       | Any                   | Yes      |
+| After group name                          | Any                   | No       |
+| Before `{`                                | Any                   | No       |
+| After `{`                                 | Any                   | No       |
+| Before `}`                                | Any                   | No       |
+| After `}`                                 | Any                   | No       |
+| After  `.`                                | None                  | -        |
+| Between property name and property value  | Any                   | Yes      |
+| Between nested objects                    | Any                   | Yes      |
+| Between property name and nested objects  | Any                   | Yes      |
+| Between property value and nested objects | Any                   | Yes      |
+| Before `#`                                | Any                   | No       |
+| After  `#`                                | None                  | -        |
+| Before `(`                                | Any                   | No       |
+| After `(`                                 | Any                   | No       |
+| Before `)`                                | Any                   | No       |
+| After `)`                                 | Any                   | No       |
+| Between constructor parameters            | Any                   | Yes      |

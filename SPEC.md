@@ -88,6 +88,15 @@ Window {
 }
 ```
 
+#### Anonymous groups ####
+
+*Anonymous group*s are *group*s that don't have name:
+
+``` asdml
+{
+}
+```
+
 ### Properties ###
 
 Classes have *properties*. *Properties* have values. Let's add some *properties* to the window class:
@@ -272,7 +281,7 @@ Button #ok {
 }
 ```
 
-Primitives can't have *ID*s because the *ID* would add the *group* with that *ID* as a *nested object* there instead of giving the *ID* to the primitive
+Primitives and *anonymous group*s can't have *ID*s because the *ID* would add the *group* with that *ID* as a *nested object* there instead of giving the *ID* to the primitive/*anonymous group*
 
 ### Constructors ###
 
@@ -290,6 +299,8 @@ Constructor *parameters* are written after the *group* name in parenthesis, sepa
 Window (800 600 "Hello World") #win {
 }
 ```
+
+*Anonymous group*s can't have constructors
 
 ## Whitespace and tabulation ##
 

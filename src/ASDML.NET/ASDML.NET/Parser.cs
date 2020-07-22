@@ -8,6 +8,9 @@ using InvalidOperationException = System.InvalidOperationException;
 
 namespace P371.ASDML
 {
+    /// <summary>
+    /// The ASDML Parser
+    /// </summary>
     public class Parser
     {
         private StreamReader reader;
@@ -16,14 +19,35 @@ namespace P371.ASDML
 
         internal Parser(StreamReader streamReader) => reader = streamReader;
 
+        /// <summary>
+        /// Creates a new ASDML Parser from the given stream
+        /// </summary>
+        /// <param name="stream">The stream to parse ASDML form</param>
         public Parser(Stream stream) : this(new StreamReader(stream)) { }
 
+        /// <summary>
+        /// Creates a new ASDML Parser from the given stream and encoding
+        /// </summary>
+        /// <param name="stream">The stream to parse ASDML form</param>
+        /// <param name="encoding">The encoding of the stream</param>
         public Parser(Stream stream, Encoding encoding) : this(new StreamReader(stream, encoding)) { }
 
+        /// <summary>
+        /// Creates a new ASDML Parser from a <see cref="string" /> containing ASDML
+        /// </summary>
+        /// <param name="text">the <see cref="string" /> to parse ASDML from</param>
         public Parser(string text) : this(new StreamReader(new StringReader(text))) { }
 
+        /// <summary>
+        /// Creates a new ASDML Parser from the given file
+        /// </summary>
+        /// <param name="file">The file to parse ASDML from</param>
         public Parser(FileInfo file) : this(new StreamReader(File.OpenText(file.FullName))) { }
 
+        /// <summary>
+        /// Parses ASDML from the resource supplied at the constructor
+        /// </summary>
+        /// <returns>A group containing all root groups and properties</returns>
         public Group Parse()
         {
             Stack<Group> groupStack = new Stack<Group>();

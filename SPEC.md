@@ -293,7 +293,13 @@ Window (800 600 "Hello World") #win {
 
 ## Whitespace and tabulation ##
 
-In ASDML, whitespace characters are separator characters. ASDML doesn't care about neither the tabulation nor the amount or kind of whitespace characters. But there are some rules to keep in mind:
+In ASDML, whitespace characters are separator characters. ASDML doesn't care about:
+
+* The tabulation
+* The amount or kind of whitespace characters
+* Line breaks: every word can be written in their own lines or in one line
+
+But there are some rules to keep in mind:
 
 | Position                                  | Whitespace character  | Required |
 |-------------------------------------------|-----------------------|----------|

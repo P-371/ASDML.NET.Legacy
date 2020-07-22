@@ -272,6 +272,8 @@ Button #ok {
 }
 ```
 
+Primitives can't have *ID*s because the *ID* would add the *group* with that *ID* as a *nested object* there instead of giving the *ID* to the primitive
+
 ### Constructors ###
 
 ``` csharp

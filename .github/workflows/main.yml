@@ -54,4 +54,4 @@ jobs:
     - name: Pack
       run: dotnet pack src/ASDML.NET/ASDML.NET -c Release -p:SourceRevisionId=$(git rev-parse --short HEAD) -o . --no-build
     - name: Push
-      run: dotnet nuget push -s https://nuget.org -k ${{secrets.NUGET_API_KEY}} *.nupkg
+      run: dotnet nuget push -s https://nuget.org -k ${{secrets.NUGET_API_KEY}} --skip-duplicate *.nupkg

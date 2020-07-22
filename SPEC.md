@@ -314,23 +314,24 @@ But there are some rules to keep in mind:
 
 | Position                                  | Whitespace character  | Required |
 |-------------------------------------------|-----------------------|----------|
+| Before `@`                                | Any                   | Yes      |
 | After `@`                                 | None                  | -        |
 | Before `[`                                | Any                   | No       |
 | After `[`                                 | Any                   | No       |
 | Before `]`                                | Any                   | No       |
 | After `]`                                 | Any                   | No       |
 | Between array items                       | Any                   | Yes      |
-| After group name                          | Any                   | No       |
 | Before `{`                                | Any                   | No       |
 | After `{`                                 | Any                   | No       |
 | Before `}`                                | Any                   | No       |
 | After `}`                                 | Any                   | No       |
-| After  `.`                                | None                  | -        |
+| Before `.`                                | Any                   | Yes      |
+| After `.`                                 | None                  | -        |
 | Between property name and property value  | Any                   | Yes      |
 | Between nested objects                    | Any                   | Yes      |
 | Between property name and nested objects  | Any                   | Yes      |
 | Between property value and nested objects | Any                   | Yes      |
-| Before `#`                                | Any                   | No       |
+| Before `#`                                | Any                   | Yes      |
 | After  `#`                                | None                  | -        |
 | Before `(`                                | Any                   | No       |
 | After `(`                                 | Any                   | No       |

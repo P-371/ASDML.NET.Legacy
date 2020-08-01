@@ -1,0 +1,26 @@
+name: NuGet Push
+
+on:
+  pull_request:
+    types: [ closed ]
+    branches: [ main ]
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.301
+    - name: Install dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build -c Release --no-restore
+    - name: Pack
+      run: dotnet pack -c Release -p:SourceRevisionId=$(git rev-parse --short HEAD) -o bin/nupkg --no-build
+    - name: Push
+      run: dotnet nuget push -s https://api.nuget.org/v3/index.json -k ${{secrets.NUGET_API_KEY}} --skip-duplicate bin/nupkg/*.nupkg

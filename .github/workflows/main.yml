@@ -15,9 +15,9 @@ jobs:
       with:
         dotnet-version: 3.1.301
     - name: Install dependencies
-      run: dotnet restore src/ASDML.NET
+      run: dotnet restore
     - name: Build
-      run: dotnet build src/ASDML.NET -c Release --no-restore
+      run: dotnet build -c Release --no-restore
 
   test:
     runs-on: ubuntu-latest
@@ -29,11 +29,11 @@ jobs:
       with:
         dotnet-version: 3.1.301
     - name: Install dependencies
-      run: dotnet restore src/ASDML.NET
+      run: dotnet restore
     - name: Build
-      run: dotnet build src/ASDML.NET -c Release --no-restore
+      run: dotnet build -c Release --no-restore
     - name: Test
-      run: dotnet test src/ASDML.NET -c Release --no-restore
+      run: dotnet test -c Release --no-restore
 
   push:
     runs-on: ubuntu-latest
@@ -47,10 +47,10 @@ jobs:
       with:
         dotnet-version: 3.1.301
     - name: Install dependencies
-      run: dotnet restore src/ASDML.NET
+      run: dotnet restore
     - name: Build
-      run: dotnet build src/ASDML.NET -c Release --no-restore
+      run: dotnet build -c Release --no-restore
     - name: Pack
-      run: dotnet pack src/ASDML.NET/ASDML.NET -c Release -p:SourceRevisionId=$(git rev-parse --short HEAD) -o . --no-build
+      run: dotnet pack -c Release -p:SourceRevisionId=$(git rev-parse --short HEAD) -o bin/nupkg --no-build
     - name: Push
-      run: dotnet nuget push -s https://nuget.org -k ${{secrets.NUGET_API_KEY}} --skip-duplicate *.nupkg
+      run: dotnet nuget push -s https://api.nuget.org/v3/index.json -k ${{secrets.NUGET_API_KEY}} --skip-duplicate bin/nupkg/*.nupkg

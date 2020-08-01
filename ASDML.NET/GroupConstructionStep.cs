@@ -6,6 +6,7 @@ namespace P371.ASDML
         Constructor = -3,
         ConstructorDone = -2,
         IDDone = -1,
-        Done = 0
+        Done = 0,
+        Unknown = 1
     }
 }

@@ -4,12 +4,14 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>P371.ASDML</RootNamespace>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <AssemblyName>ASDML.NET</AssemblyName>
     <LangVersion>8</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>1.0.0-alpha2</Version>
+    <Version>1.0.0-alpha3</Version>
     <Authors>P-371</Authors>
     <Company>P-371</Company>
     <Description>ASDML parser for .NET</Description>

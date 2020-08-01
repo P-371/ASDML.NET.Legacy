@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using P371.ASDML.Types.Helpers;
 
 namespace P371.ASDML.Types
 {
     /// <summary>
     /// A Group in ASDML
     /// </summary>
-    public sealed class Group : Object<Group>
+    public sealed class Group : Object<Group>, IObjectCollection
     {
         private string name;
 
@@ -35,7 +36,7 @@ namespace P371.ASDML.Types
         /// <summary>
         /// The ASDML Group Constructor parameters
         /// </summary>
-        public List<Object> ConstructorParameters { get; } = new List<Object>();
+        public ConstructorParameters ConstructorParameters { get; } = new ConstructorParameters();
 
         /// <summary>
         /// The ASDML Group Properties as key-value pairs
@@ -45,7 +46,7 @@ namespace P371.ASDML.Types
         /// <summary>
         /// The list of ASDML Group nested objects
         /// </summary>
-        public List<Object> NestedContent { get; } = new List<Object>();
+        public List<Object> NestedObjects { get; } = new List<Object>();
 
         /// <summary>
         /// Returns the group itself

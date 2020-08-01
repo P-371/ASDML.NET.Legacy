@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using P371.ASDML.Exceptions;
 using P371.ASDML.Types;
+using P371.ASDML.Types.Helpers;
 using static P371.ASDML.GroupConstructionStep;
 using InvalidOperationException = System.InvalidOperationException;
 
@@ -44,23 +45,33 @@ namespace P371.ASDML
         /// <param name="file">The file to parse ASDML from</param>
         public Parser(FileInfo file) : this(new StreamReader(File.OpenText(file.FullName))) { }
 
+        private void EnsureGroupWritable(Group group)
+        {
+            if (group is null || group.ConstructionStep == Done) { }
+            else
+            {
+                throw UnexpectedCharacter;
+            }
+        }
+
         /// <summary>
         /// Parses ASDML from the resource supplied at the constructor
         /// </summary>
         /// <returns>A group containing all root groups and properties</returns>
         public Group Parse()
         {
-            Stack<Group> groupStack = new Stack<Group>();
-            groupStack.Push(Group.CreateRoot());
-            string propertyName = null;
+            Group root = Group.CreateRoot();
+            Stack<IObjectCollection> groupStack = new Stack<IObjectCollection>();
+            groupStack.Push(root);
+            string propName = null;
             while (true)
             {
-                Group currentGroup = groupStack.Peek();
-                GroupConstructionStep currentStep = currentGroup.ConstructionStep;
+                Group currentGroup = groupStack.Peek() as Group;
+                GroupConstructionStep currentStep = currentGroup?.ConstructionStep ?? GroupConstructionStep.Unknown;
                 reader.SkipWhiteSpaces();
                 if (reader.EndOfStream)
                 {
-                    if (currentGroup.ConstructionStep != Done)
+                    if (currentStep != Done)
                     {
                         throw new EndOfStreamException();
                     }
@@ -69,11 +80,12 @@ namespace P371.ASDML
                 switch (reader.Peek())
                 {
                     case '@':
+                        EnsureGroupWritable(currentGroup);
                         reader.Read(); // '@'
                         if (reader.Peek() == '"') // Multiline text
                         {
-                            Text text = reader.ReadText(true, currentStep == Constructor);
-                            AutoAdd(currentGroup, propertyName, text);
+                            Text text = reader.ReadText(true);
+                            AutoAdd(groupStack.Peek(), propName, text);
                         }
                         else if (reader.Peek().In('t', 'f', 'n')) // Logical / @null
                         {
@@ -93,11 +105,11 @@ namespace P371.ASDML
                             {
                                 throw new EndOfStreamException();
                             }
-                            else if (!reader.EndOfStream && (!char.IsWhiteSpace(reader.Peek()) || (currentStep == Constructor && reader.Peek() != ')')))
+                            else if (!reader.EndObject)
                             {
                                 throw UnexpectedCharacter;
                             }
-                            AutoAdd(groupStack.Peek(), propertyName, expectedValue);
+                            AutoAdd(groupStack.Peek(), propName, expectedValue);
                         }
                         else
                         {
@@ -105,41 +117,65 @@ namespace P371.ASDML
                         }
                         break;
                     case '#':
+                        // If currentGroup is null, (currentStep = Unknown) > IDDone
                         if (currentStep >= IDDone)
                         {
                             throw UnexpectedCharacter;
                         }
                         reader.Read(); // '#'
-                        currentGroup.ID = reader.ReadSimpleText(currentStep == Constructor);
+                        currentGroup.ID = reader.ReadSimpleText();
                         currentGroup.ConstructionStep = IDDone;
                         // TODO Add reference resolve
                         break;
                     case '.': // Property
-                        reader.Read(); // '.'
-                        if (reader.WhiteSpaceNext || propertyName != null)
+                        if (propName != null || !(groupStack.Peek() is Group))
                         {
                             throw UnexpectedCharacter;
                         }
-                        propertyName = reader.ReadSimpleText(currentStep == Constructor);
+                        EnsureGroupWritable(currentGroup);
+                        reader.Read(); // '.'
+                        propName = reader.ReadSimpleText();
                         continue;
                     case '(':
+                        // If currentGroup is null, (currentStep = Unknown) > Constructor
                         if (currentStep >= Constructor)
                         {
                             throw UnexpectedCharacter;
                         }
                         reader.Read(); // '('
                         currentGroup.ConstructionStep = Constructor;
+                        groupStack.Push(currentGroup.ConstructorParameters);
                         break;
                     case ')':
-                        if (currentStep != Constructor)
+                        if (groupStack.Count <= 1 || !(groupStack.Peek() is ConstructorParameters))
                         {
                             throw UnexpectedCharacter;
                         }
                         reader.Read(); // ')'
-                        currentGroup.ConstructionStep = ConstructorDone;
+                        groupStack.Pop();
+                        ((Group)groupStack.Peek()).ConstructionStep = ConstructorDone;
+                        break;
+                    case '[':
+                        EnsureGroupWritable(currentGroup);
+                        reader.Read(); // '['
+                        Array array = new Array();
+                        AutoAdd(groupStack.Peek(), propName, array);
+                        groupStack.Push(array);
+                        break;
+                    case ']':
+                        if (groupStack.Count <= 1 || !(groupStack.Peek() is Array))
+                        {
+                            throw UnexpectedCharacter;
+                        }
+                        reader.Read(); // ']'
+                        if (!reader.EndObject)
+                        {
+                            throw UnexpectedCharacter;
+                        }
+                        groupStack.Pop();
                         break;
                     case '{':
-                        if (currentStep == Done)
+                        if (currentGroup is null || currentStep == Done)
                         {
                             throw UnexpectedCharacter;
                         }
@@ -147,66 +183,70 @@ namespace P371.ASDML
                         currentGroup.ConstructionStep = Done;
                         break;
                     case '}':
-                        if (propertyName != null || groupStack.Count <= 1)
+                        if (propName != null || groupStack.Count <= 1 || !(groupStack.Peek() is Group))
                         {
                             throw UnexpectedCharacter;
                         }
                         reader.Read(); // '}'
+                        if (!reader.EndObject)
+                        {
+                            throw UnexpectedCharacter;
+                        }
                         groupStack.Pop();
                         break;
                     case '+':
                     case '-':
                     case var digit when char.IsDigit(digit): // Number
-                        Number number = reader.ReadNumber(currentStep == Constructor);
-                        AutoAdd(currentGroup, propertyName, number);
+                        EnsureGroupWritable(currentGroup);
+                        Number number = reader.ReadNumber();
+                        AutoAdd(groupStack.Peek(), propName, number);
                         break;
                     case '_':
                     case var letter when char.IsLetter(letter): // Simple text / group
-                        SimpleText simpleText = reader.ReadSimpleText(currentStep == Constructor);
+                        EnsureGroupWritable(currentGroup);
+                        SimpleText simpleText = reader.ReadSimpleText();
                         reader.SkipWhiteSpaces();
                         if (!reader.EndOfStream)
                         {
                             if (reader.Peek().In('(', '#', '{'))
                             {
                                 Group group = new Group(simpleText);
-                                AutoAdd(currentGroup, propertyName, group);
+                                AutoAdd(groupStack.Peek(), propName, group);
                                 groupStack.Push(group);
                                 break;
                             }
                         }
-                        AutoAdd(currentGroup, propertyName, simpleText);
+                        AutoAdd(groupStack.Peek(), propName, simpleText);
                         break;
                     case '"': // Text
+                        EnsureGroupWritable(currentGroup);
                         Text singleLineText = reader.ReadText(currentStep == Constructor);
-                        AutoAdd(currentGroup, propertyName, singleLineText);
+                        AutoAdd(groupStack.Peek(), propName, singleLineText);
                         break;
                     default:
                         throw UnexpectedCharacter;
                 }
-                propertyName = null;
+                propName = null;
             }
-            return groupStack.Count == 1 ? groupStack.Pop() : throw new EndOfStreamException();
+            return groupStack.Count == 1 ? root : throw new EndOfStreamException();
         }
 
-        private void AutoAdd(Group group, string propertyName, Object value)
+        private void AutoAdd(IObjectCollection collection, string propertyName, Object value)
         {
-            switch (group.ConstructionStep)
+            if (propertyName != null)
             {
-                case Constructor:
-                    group.ConstructorParameters.Add(value);
-                    break;
-                case Done:
-                    if (propertyName == null)
-                    {
-                        group.NestedContent.Add(value);
-                    }
-                    else
-                    {
-                        group.Properties.Add(propertyName, value);
-                    }
-                    break;
-                default:
-                    throw new System.InvalidOperationException();
+                if (collection is Group group)
+                {
+                    group.Properties.Add(propertyName, value);
+                }
+                else
+                {
+                    throw new InvalidOperationException("This shouldn't have happened. Non-group collections can't have properties");
+                }
+            }
+            else
+            {
+                collection.NestedObjects.Add(value);
             }
         }
     }

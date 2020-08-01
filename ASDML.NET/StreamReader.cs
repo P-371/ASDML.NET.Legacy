@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text;
 using P371.ASDML.Exceptions;
 using P371.ASDML.Types;
@@ -10,6 +11,15 @@ namespace P371.ASDML
     internal class StreamReader : IDisposable
     {
         private TextReader reader { get; }
+
+        internal bool EndObject
+        {
+            get
+            {
+                char[] allowedNext = { ']', '{', '}', '(', ')' };
+                return EndOfStream || char.IsWhiteSpace(Peek()) || Peek().In(allowedNext);
+            }
+        }
 
         internal bool WhiteSpaceNext => char.IsWhiteSpace(Peek());
 
@@ -36,20 +46,7 @@ namespace P371.ASDML
             this.reader = reader;
         }
 
-        private void PrepareObjectReading()
-        {
-            SkipWhiteSpaces();
-            EnsureNotEndOfStream();
-        }
-
-        private void EnsureWhiteSpaceFollows()
-        {
-            if (!EndOfStream && !WhiteSpaceNext)
-            {
-                throw UnexpectedCharacter;
-            }
-        }
-
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void EnsureNotEndOfStream()
         {
             if (EndOfStream)
@@ -107,16 +104,16 @@ namespace P371.ASDML
             }
         }
 
-        public Number ReadNumber(bool constructor = false)
+        public Number ReadNumber()
         {
             StringBuilder builder = new StringBuilder();
-            PrepareObjectReading();
+            EnsureNotEndOfStream();
             if (Peek().In('+', '-'))
             {
                 builder.Append(Read()); // sign
             }
             builder.Append(ReadDigits());
-            if (EndOfStream || WhiteSpaceNext || (constructor && Peek() == ')'))
+            if (EndObject)
             {
                 return builder.ToString();
             }
@@ -129,7 +126,7 @@ namespace P371.ASDML
                 builder.Append(Read()); // '.'
                 builder.Append(ReadDigits());
             }
-            if (EndOfStream || WhiteSpaceNext || (constructor && Peek() == ')'))
+            if (EndObject)
             {
                 return builder.ToString();
             }
@@ -145,16 +142,16 @@ namespace P371.ASDML
             }
             builder.Append(Read()); // sign
             builder.Append(ReadDigits());
-            if (!constructor || Peek() != ')')
+            if (!EndObject)
             {
-                EnsureWhiteSpaceFollows();
+                throw UnexpectedCharacter;
             }
             return builder.ToString();
         }
 
-        public Text ReadText(bool multiLine = false, bool constructor = false)
+        public Text ReadText(bool multiLine = false)
         {
-            PrepareObjectReading();
+            EnsureNotEndOfStream();
             if (Peek() == '"')
             {
                 Read(); // Quotation mark
@@ -164,24 +161,24 @@ namespace P371.ASDML
                     throw EndOfStream ? new EndOfStreamException() : (Exception)UnexpectedCharacter;
                 }
                 Read(); // Quotation mark
-                if (!constructor || Peek() != ')')
+                if (!EndObject)
                 {
-                    EnsureWhiteSpaceFollows();
+                    throw UnexpectedCharacter;
                 }
                 return text;
             }
             else
             {
-                return ReadSimpleText(constructor);
+                return ReadSimpleText();
             }
         }
 
-        public SimpleText ReadSimpleText(bool constructor = false)
+        public SimpleText ReadSimpleText()
         {
-            PrepareObjectReading();
+            EnsureNotEndOfStream();
             char[] disallowed = { '"', '(', ')', '[', ']', '{', '}' };
             char[] disallowedFirst = { '@', '#', '+', '-', '.' };
-            if (Peek().In(disallowedFirst) || char.IsDigit(Peek()))
+            if (EndObject || Peek().In(disallowedFirst) || char.IsDigit(Peek()))
             {
                 throw UnexpectedCharacter;
             }
@@ -190,10 +187,10 @@ namespace P371.ASDML
             {
                 builder.Append(Read());
             }
-            while (!EndOfStream && !Peek().In(disallowed) && !WhiteSpaceNext);
-            if (!constructor || Peek() != ')')
+            while (!EndObject && !Peek().In(disallowed));
+            if (!EndObject)
             {
-                EnsureWhiteSpaceFollows();
+                throw UnexpectedCharacter;
             }
             return builder.ToString();
         }

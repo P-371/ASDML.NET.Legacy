@@ -72,7 +72,7 @@ namespace P371.ASDML
                         reader.Read(); // '@'
                         if (reader.Peek() == '"') // Multiline text
                         {
-                            Text text = reader.ReadText(true, currentStep == Constructor);
+                            Text text = reader.ReadText(true);
                             AutoAdd(currentGroup, propertyName, text);
                         }
                         else if (reader.Peek().In('t', 'f', 'n')) // Logical / @null
@@ -93,7 +93,7 @@ namespace P371.ASDML
                             {
                                 throw new EndOfStreamException();
                             }
-                            else if (!reader.EndOfStream && (!char.IsWhiteSpace(reader.Peek()) || (currentStep == Constructor && reader.Peek() != ')')))
+                            else if (!reader.EndObject)
                             {
                                 throw UnexpectedCharacter;
                             }
@@ -110,17 +110,17 @@ namespace P371.ASDML
                             throw UnexpectedCharacter;
                         }
                         reader.Read(); // '#'
-                        currentGroup.ID = reader.ReadSimpleText(currentStep == Constructor);
+                        currentGroup.ID = reader.ReadSimpleText();
                         currentGroup.ConstructionStep = IDDone;
                         // TODO Add reference resolve
                         break;
                     case '.': // Property
                         reader.Read(); // '.'
-                        if (reader.WhiteSpaceNext || propertyName != null)
+                        if (propertyName != null)
                         {
                             throw UnexpectedCharacter;
                         }
-                        propertyName = reader.ReadSimpleText(currentStep == Constructor);
+                        propertyName = reader.ReadSimpleText();
                         continue;
                     case '(':
                         if (currentStep >= Constructor)
@@ -157,12 +157,12 @@ namespace P371.ASDML
                     case '+':
                     case '-':
                     case var digit when char.IsDigit(digit): // Number
-                        Number number = reader.ReadNumber(currentStep == Constructor);
+                        Number number = reader.ReadNumber();
                         AutoAdd(currentGroup, propertyName, number);
                         break;
                     case '_':
                     case var letter when char.IsLetter(letter): // Simple text / group
-                        SimpleText simpleText = reader.ReadSimpleText(currentStep == Constructor);
+                        SimpleText simpleText = reader.ReadSimpleText();
                         reader.SkipWhiteSpaces();
                         if (!reader.EndOfStream)
                         {

@@ -90,10 +90,10 @@ namespace P371.ASDML.Tests
         {
             Parser parser = new Parser("\"This is a text\"");
             Group group = parser.Parse();
-            Assert.Single(group.NestedContent);
-            Assert.Equal((Text)"This is a text", group.NestedContent[0]);
+            Assert.Single(group.NestedObjects);
+            Assert.Equal((Text)"This is a text", group.NestedObjects[0]);
             Assert.Empty(group.Properties);
-            Assert.Empty(group.ConstructorParameters);
+            Assert.Empty(group.ConstructorParameters.NestedObjects);
             Assert.Null(group.ID);
         }
 
@@ -126,10 +126,10 @@ namespace P371.ASDML.Tests
         {
             Parser parser = new Parser("Hello");
             Group group = parser.Parse();
-            Assert.Single(group.NestedContent);
-            Assert.Equal((SimpleText)"Hello", group.NestedContent[0]);
+            Assert.Single(group.NestedObjects);
+            Assert.Equal((SimpleText)"Hello", group.NestedObjects[0]);
             Assert.Empty(group.Properties);
-            Assert.Empty(group.ConstructorParameters);
+            Assert.Empty(group.ConstructorParameters.NestedObjects);
             Assert.Null(group.ID);
         }
 
@@ -138,10 +138,10 @@ namespace P371.ASDML.Tests
         {
             Parser parser = new Parser("x42@+.#-");
             Group group = parser.Parse();
-            Assert.Single(group.NestedContent);
-            Assert.Equal((SimpleText)"x42@+.#-", group.NestedContent[0]);
+            Assert.Single(group.NestedObjects);
+            Assert.Equal((SimpleText)"x42@+.#-", group.NestedObjects[0]);
             Assert.Empty(group.Properties);
-            Assert.Empty(group.ConstructorParameters);
+            Assert.Empty(group.ConstructorParameters.NestedObjects);
             Assert.Null(group.ID);
         }
 
@@ -150,10 +150,10 @@ namespace P371.ASDML.Tests
         {
             Parser parser = new Parser("_");
             Group group = parser.Parse();
-            Assert.Single(group.NestedContent);
-            Assert.Equal((SimpleText)"_", group.NestedContent[0]);
+            Assert.Single(group.NestedObjects);
+            Assert.Equal((SimpleText)"_", group.NestedObjects[0]);
             Assert.Empty(group.Properties);
-            Assert.Empty(group.ConstructorParameters);
+            Assert.Empty(group.ConstructorParameters.NestedObjects);
             Assert.Null(group.ID);
         }
 
@@ -183,10 +183,10 @@ namespace P371.ASDML.Tests
             Parser parser = new Parser(@"@""Multiline
 text""");
             Group group = parser.Parse();
-            Assert.Single(group.NestedContent);
-            Assert.Equal((MultiLineText)"Multiline\ntext", group.NestedContent[0]);
+            Assert.Single(group.NestedObjects);
+            Assert.Equal((MultiLineText)"Multiline\ntext", group.NestedObjects[0]);
             Assert.Empty(group.Properties);
-            Assert.Empty(group.ConstructorParameters);
+            Assert.Empty(group.ConstructorParameters.NestedObjects);
             Assert.Null(group.ID);
         }
 

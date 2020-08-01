@@ -123,10 +123,10 @@ namespace P371.ASDML.Tests
         {
             Parser parser = new Parser("7");
             Group group = parser.Parse();
-            Assert.Single(group.NestedContent);
-            Assert.Equal((Number)7, group.NestedContent[0]);
+            Assert.Single(group.NestedObjects);
+            Assert.Equal((Number)7, group.NestedObjects[0]);
             Assert.Empty(group.Properties);
-            Assert.Empty(group.ConstructorParameters);
+            Assert.Empty(group.ConstructorParameters.NestedObjects);
             Assert.Null(group.ID);
         }
 
@@ -135,10 +135,10 @@ namespace P371.ASDML.Tests
         {
             Parser parser = new Parser("-2");
             Group group = parser.Parse();
-            Assert.Single(group.NestedContent);
-            Assert.Equal((Number)(-2), group.NestedContent[0]);
+            Assert.Single(group.NestedObjects);
+            Assert.Equal((Number)(-2), group.NestedObjects[0]);
             Assert.Empty(group.Properties);
-            Assert.Empty(group.ConstructorParameters);
+            Assert.Empty(group.ConstructorParameters.NestedObjects);
             Assert.Null(group.ID);
         }
 
@@ -147,10 +147,10 @@ namespace P371.ASDML.Tests
         {
             Parser parser = new Parser("2.71");
             Group group = parser.Parse();
-            Assert.Single(group.NestedContent);
-            Assert.Equal((Number)2.71, group.NestedContent[0]);
+            Assert.Single(group.NestedObjects);
+            Assert.Equal((Number)2.71, group.NestedObjects[0]);
             Assert.Empty(group.Properties);
-            Assert.Empty(group.ConstructorParameters);
+            Assert.Empty(group.ConstructorParameters.NestedObjects);
             Assert.Null(group.ID);
         }
 
@@ -159,10 +159,10 @@ namespace P371.ASDML.Tests
         {
             Parser parser = new Parser("-3.14");
             Group group = parser.Parse();
-            Assert.Single(group.NestedContent);
-            Assert.Equal((Number)(-3.14), group.NestedContent[0]);
+            Assert.Single(group.NestedObjects);
+            Assert.Equal((Number)(-3.14), group.NestedObjects[0]);
             Assert.Empty(group.Properties);
-            Assert.Empty(group.ConstructorParameters);
+            Assert.Empty(group.ConstructorParameters.NestedObjects);
             Assert.Null(group.ID);
         }
 
@@ -171,10 +171,10 @@ namespace P371.ASDML.Tests
         {
             Parser parser = new Parser("6.67E-11");
             Group group = parser.Parse();
-            Assert.Single(group.NestedContent);
-            Assert.Equal((Number)double.Parse("6.67E-11"), group.NestedContent[0]);
+            Assert.Single(group.NestedObjects);
+            Assert.Equal((Number)double.Parse("6.67E-11"), group.NestedObjects[0]);
             Assert.Empty(group.Properties);
-            Assert.Empty(group.ConstructorParameters);
+            Assert.Empty(group.ConstructorParameters.NestedObjects);
             Assert.Null(group.ID);
         }
 
@@ -183,10 +183,10 @@ namespace P371.ASDML.Tests
         {
             Parser parser = new Parser("+6E+23");
             Group group = parser.Parse();
-            Assert.Single(group.NestedContent);
-            Assert.Equal((Number)double.Parse("6E+23"), group.NestedContent[0]);
+            Assert.Single(group.NestedObjects);
+            Assert.Equal((Number)double.Parse("6E+23"), group.NestedObjects[0]);
             Assert.Empty(group.Properties);
-            Assert.Empty(group.ConstructorParameters);
+            Assert.Empty(group.ConstructorParameters.NestedObjects);
             Assert.Null(group.ID);
         }
 

@@ -112,6 +112,16 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
+        public void Test13()
+        {
+            Parser parser = new Parser("\"This is a\"text");
+            UnexpectedCharacterException exception = Assert.Throws<UnexpectedCharacterException>(parser.Parse);
+            Assert.Equal('t', exception.Character);
+            Assert.Equal(1, exception.Line);
+            Assert.Equal(12, exception.Column);
+        }
+
+        [Fact]
         public void SimpleTest1()
         {
             Parser parser = new Parser("Hello");
@@ -151,6 +161,16 @@ namespace P371.ASDML.Tests
         public void SimpleTest4()
         {
             Parser parser = new Parser("ASDML\"");
+            UnexpectedCharacterException exception = Assert.Throws<UnexpectedCharacterException>(parser.Parse);
+            Assert.Equal('"', exception.Character);
+            Assert.Equal(1, exception.Line);
+            Assert.Equal(6, exception.Column);
+        }
+
+        [Fact]
+        public void SimpleTest5()
+        {
+            Parser parser = new Parser("ASDML\"asdml");
             UnexpectedCharacterException exception = Assert.Throws<UnexpectedCharacterException>(parser.Parse);
             Assert.Equal('"', exception.Character);
             Assert.Equal(1, exception.Line);

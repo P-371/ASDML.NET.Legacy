@@ -327,5 +327,55 @@ namespace P371.ASDML.Tests
             Assert.Equal(1, exception.Line);
             Assert.Equal(2, exception.Column);
         }
+
+        [Fact]
+        public void Test34()
+        {
+            Parser parser = new Parser("6.67X-11");
+            UnexpectedCharacterException exception = Assert.Throws<UnexpectedCharacterException>(parser.Parse);
+            Assert.Equal('X', exception.Character);
+            Assert.Equal(1, exception.Line);
+            Assert.Equal(5, exception.Column);
+        }
+
+        [Fact]
+        public void Test35()
+        {
+            Parser parser = new Parser("6.67.11");
+            UnexpectedCharacterException exception = Assert.Throws<UnexpectedCharacterException>(parser.Parse);
+            Assert.Equal('.', exception.Character);
+            Assert.Equal(1, exception.Line);
+            Assert.Equal(5, exception.Column);
+        }
+
+        [Fact]
+        public void Test36()
+        {
+            Parser parser = new Parser("6. ");
+            UnexpectedCharacterException exception = Assert.Throws<UnexpectedCharacterException>(parser.Parse);
+            Assert.Equal(' ', exception.Character);
+            Assert.Equal(1, exception.Line);
+            Assert.Equal(3, exception.Column);
+        }
+
+        [Fact]
+        public void Test37()
+        {
+            Parser parser = new Parser("6.x");
+            UnexpectedCharacterException exception = Assert.Throws<UnexpectedCharacterException>(parser.Parse);
+            Assert.Equal('x', exception.Character);
+            Assert.Equal(1, exception.Line);
+            Assert.Equal(3, exception.Column);
+        }
+
+        [Fact]
+        public void Test38()
+        {
+            Parser parser = new Parser("6.67E-11X");
+            UnexpectedCharacterException exception = Assert.Throws<UnexpectedCharacterException>(parser.Parse);
+            Assert.Equal('X', exception.Character);
+            Assert.Equal(1, exception.Line);
+            Assert.Equal(9, exception.Column);
+        }
     }
 }

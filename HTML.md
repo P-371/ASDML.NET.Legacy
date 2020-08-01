@@ -1,3 +1,0 @@
-# HTML Language Extension #
-
-WIP

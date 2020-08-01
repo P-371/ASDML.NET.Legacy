@@ -165,7 +165,7 @@ namespace P371.ASDML.Tests
             Group group = parser.Parse();
             Assert.Single(group.NestedObjects);
             group = (Group)group.NestedObjects[0];
-            Assert.Equal(1, group.ConstructorParameters.NestedObjects.Count);
+            Assert.Single(group.ConstructorParameters.NestedObjects);
         }
 
         [Fact]
@@ -175,7 +175,7 @@ namespace P371.ASDML.Tests
             Group group = parser.Parse();
             Assert.Single(group.NestedObjects);
             group = (Group)group.NestedObjects[0];
-            Assert.Equal(1, group.ConstructorParameters.NestedObjects.Count);
+            Assert.Single(group.ConstructorParameters.NestedObjects);
         }
 
         [Fact]

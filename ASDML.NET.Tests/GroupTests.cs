@@ -217,5 +217,34 @@ namespace P371.ASDML.Tests
             Assert.Equal(1, exception.Line);
             Assert.Equal(2, exception.Column);
         }
+
+        [Fact]
+        public void IDTest1()
+        {
+            Parser parser = new Parser("Group #group1 { } Group #group2 { .GroupX #group1 }");
+            Group group = parser.Parse();
+            Group group1 = (Group)group.NestedObjects[0];
+            Group group2 = (Group)group.NestedObjects[1];
+            Assert.Equal(group1, group2.Properties["GroupX"]);
+        }
+
+        [Fact]
+        public void IDTest2()
+        {
+            Parser parser = new Parser("Group #group1 { } Group #group2 { #group1 }");
+            Group group = parser.Parse();
+            Group group1 = (Group)group.NestedObjects[0];
+            Group group2 = (Group)group.NestedObjects[1];
+            Assert.Equal(group1, group2.NestedObjects[0]);
+        }
+
+        [Fact]
+        public void IDTest3()
+        {
+            Parser parser = new Parser("Group #group1 { .GroupX #group1 }");
+            Group group = parser.Parse();
+            Group group1 = (Group)group.NestedObjects[0];
+            Assert.Equal(group1, group1.Properties["GroupX"]);
+        }
     }
 }

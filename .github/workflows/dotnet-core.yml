@@ -8,6 +8,7 @@ on:
 
 jobs:
   build:
+    name: Build Project
     runs-on: ubuntu-latest
 
     steps:
@@ -22,6 +23,7 @@ jobs:
       run: dotnet build -c Release --no-restore
 
   test:
+    name: Test Project
     runs-on: ubuntu-latest
 
     steps:

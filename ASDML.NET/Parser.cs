@@ -5,8 +5,8 @@ using System.Text;
 using P371.ASDML.Exceptions;
 using P371.ASDML.Types;
 using P371.ASDML.Types.Helpers;
-using static P371.ASDML.GroupConstructionStep;
 using InvalidOperationException = System.InvalidOperationException;
+using static P371.ASDML.GroupConstructionStep;
 
 namespace P371.ASDML
 {
@@ -52,6 +52,25 @@ namespace P371.ASDML
             else
             {
                 throw UnexpectedCharacter;
+            }
+        }
+
+        private void AutoAdd(IObjectCollection collection, string propertyName, Object value)
+        {
+            if (propertyName != null)
+            {
+                if (collection is Group group)
+                {
+                    group.Properties.Add(propertyName, value);
+                }
+                else
+                {
+                    throw new InvalidOperationException("This shouldn't have happened. Non-group collections can't have properties");
+                }
+            }
+            else
+            {
+                collection.NestedObjects.Add(value);
             }
         }
 
@@ -159,9 +178,9 @@ namespace P371.ASDML
                         {
                             if (currentStep != Done)
                             {
-                            throw UnexpectedCharacter;
-                        }
-                        reader.Read(); // '#'
+                                throw UnexpectedCharacter;
+                            }
+                            reader.Read(); // '#'
                             AutoAdd(currentGroup, propName, new GroupReference(reader.ReadSimpleText()));
                             break;
                         }
@@ -272,25 +291,6 @@ namespace P371.ASDML
             }
             ResolveReferences(root, idReferences);
             return groupStack.Count == 1 ? root : throw new EndOfStreamException();
-        }
-
-        private void AutoAdd(IObjectCollection collection, string propertyName, Object value)
-        {
-            if (propertyName != null)
-            {
-                if (collection is Group group)
-                {
-                    group.Properties.Add(propertyName, value);
-                }
-                else
-                {
-                    throw new InvalidOperationException("This shouldn't have happened. Non-group collections can't have properties");
-                }
-            }
-            else
-            {
-                collection.NestedObjects.Add(value);
-            }
         }
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using P371.ASDML.Exceptions;
 using P371.ASDML.Types;
@@ -54,6 +55,41 @@ namespace P371.ASDML
             }
         }
 
+        private void ResolveReferences(Group group, Dictionary<string, Group> idReferences)
+        {
+            List<Group> process = new List<Group>();
+            process.Add(group);
+            int i = 0;
+            do
+            {
+                Group currentGroup = process[i];
+                for (int j = 0; j < currentGroup.NestedObjects.Count; j++)
+                {
+                    if (currentGroup.NestedObjects[j] is Group g)
+                    {
+                        process.Add(g);
+                    }
+                    else if (currentGroup.NestedObjects[j] is GroupReference gr)
+                    {
+                        currentGroup.NestedObjects[j] = idReferences[gr.GroupID];
+                    }
+                }
+                var keys = currentGroup.Properties.Keys.ToArray();
+                foreach (var key in keys)
+                {
+                    if (currentGroup.Properties[key] is Group g)
+                    {
+                        process.Add(g);
+                    }
+                    else if (currentGroup.Properties[key] is GroupReference gr)
+                    {
+                        currentGroup.Properties[key] = idReferences[gr.GroupID];
+                    }
+                }
+            }
+            while (++i < process.Count);
+        }
+
         /// <summary>
         /// Parses ASDML from the resource supplied at the constructor
         /// </summary>
@@ -61,6 +97,7 @@ namespace P371.ASDML
         public Group Parse()
         {
             Group root = Group.CreateRoot();
+            Dictionary<string, Group> idReferences = new Dictionary<string, Group>();
             Stack<IObjectCollection> groupStack = new Stack<IObjectCollection>();
             groupStack.Push(root);
             string propName = null;
@@ -120,12 +157,17 @@ namespace P371.ASDML
                         // If currentGroup is null, (currentStep = Unknown) > IDDone
                         if (currentStep >= IDDone)
                         {
+                            if (currentStep != Done)
+                            {
                             throw UnexpectedCharacter;
                         }
                         reader.Read(); // '#'
-                        currentGroup.ID = reader.ReadSimpleText();
+                            AutoAdd(currentGroup, propName, new GroupReference(reader.ReadSimpleText()));
+                            break;
+                        }
+                        reader.Read(); // '#'
+                        idReferences.Add(currentGroup.ID = reader.ReadSimpleText(), currentGroup);
                         currentGroup.ConstructionStep = IDDone;
-                        // TODO Add reference resolve
                         break;
                     case '.': // Property
                         if (propName != null || !(groupStack.Peek() is Group))
@@ -228,6 +270,7 @@ namespace P371.ASDML
                 }
                 propName = null;
             }
+            ResolveReferences(root, idReferences);
             return groupStack.Count == 1 ? root : throw new EndOfStreamException();
         }
 

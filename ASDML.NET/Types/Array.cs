@@ -1,5 +1,5 @@
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using P371.ASDML.Types.Helpers;
 
 namespace P371.ASDML.Types

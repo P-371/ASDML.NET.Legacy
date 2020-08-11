@@ -11,13 +11,13 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>1.0.0-alpha3</Version>
+    <Version>1.0.0-alpha4</Version>
     <Authors>P-371</Authors>
     <Company>P-371</Company>
     <Description>ASDML parser for .NET</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/P-371/ASDML</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/P-371/ASDML</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/P-371/ASDML.NET</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/P-371/ASDML.NET</RepositoryUrl>
     <Copyright>Copyleft 🄯 P-371, 2020</Copyright>
     <RepositoryType>git</RepositoryType>
     <PackageTags>asdml;markup;parse;parser</PackageTags>

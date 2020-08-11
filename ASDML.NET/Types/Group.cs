@@ -9,29 +9,18 @@ namespace P371.ASDML.Types
     /// </summary>
     public sealed class Group : Object<Group>, IObjectCollection
     {
-        private string name;
-
         internal GroupConstructionStep ConstructionStep = GroupConstructionStep.NameDone;
 
         /// <summary>
         /// The ASDML Group #ID
         /// </summary>
-        public string ID { get; internal set; }
+        public SimpleText ID { get; internal set; }
 
         /// <summary>
         /// The ASDML Group Name
         /// </summary>
         /// <exception cref="ArgumentException">If the given name is not a Simple Text Literal</exception>
-        public string Name
-        {
-            get => name;
-            set
-            {
-                name = Text.IsSimple(value)
-                    ? value
-                    : throw new ArgumentException("The value is not a simple text literal", nameof(value));
-            }
-        }
+        public SimpleText Name { get; set; }
 
         /// <summary>
         /// The ASDML Group Constructor parameters
@@ -61,7 +50,7 @@ namespace P371.ASDML.Types
         /// <param name="name">The group name. It must be a Simple Text Literal</param>
         /// <exception cref="ArgumentException">If the given name is not a Simple Text Literal</exception>
         /// <returns>A new group instance</returns>
-        public Group(string name) : base(null) => Name = name;
+        public Group(SimpleText name) : base(null) => Name = name;
 
         internal static Group CreateRoot() => new Group { ConstructionStep = GroupConstructionStep.Done };
 

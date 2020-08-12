@@ -20,7 +20,7 @@ jobs:
       id: get_version
       run: echo '::set-output name=version::`cat ASDML.NET/ASDML.NET.csproj | sed -nE "s/[[:blank:]]*<Version>(.*)<\/Version>[[:blank:]]*/v\1/p"`'
     - name: Checks if tag exists
-      run: git tag --list | egrep -q "^${{ steps.get_version.outputs.version }}$" && echo '::set-output name=exists::1' || exit 1
+      run: git tag --list | egrep -q "^${{ steps.get_version.outputs.version }}$" && exit 1
     
   tag:
     name: Create GitHub Tag

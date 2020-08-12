@@ -8,8 +8,7 @@ namespace P371.ASDML.Tests
     {
         const int TRESHOLD = 20;
 
-        [Fact]
-        public void CreateData()
+        public StressTests()
         {
             Func<string> random = () => "ASDML_" + Path.GetRandomFileName().Replace(".", "");
             using (var asdml = new StreamWriter($"../../../data{TRESHOLD}.asdml"))

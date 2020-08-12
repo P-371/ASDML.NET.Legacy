@@ -153,7 +153,7 @@ namespace P371.ASDML
                                 _ => throw new InvalidOperationException("This shouldn't have happened. The StreamReader peeked a different character.")
                             };
                             int i = 0;
-                            while (!reader.EndOfStream && i < expectedText.Length && reader.Peek() == expectedText[i++])
+                            while (!reader.EndOfStream && i < expectedText.Length && char.ToLowerInvariant(reader.Peek()) == expectedText[i++])
                             {
                                 reader.Read();
                             }

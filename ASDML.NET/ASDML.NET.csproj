@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>1.0.0-alpha4</Version>
+    <Version>1.0.0</Version>
     <Authors>P-371</Authors>
     <Company>P-371</Company>
     <Description>ASDML parser for .NET</Description>

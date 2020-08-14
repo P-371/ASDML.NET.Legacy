@@ -281,7 +281,7 @@ namespace P371.ASDML
                         break;
                     case '"': // Text
                         EnsureGroupWritable(currentGroup);
-                        Text singleLineText = reader.ReadText(currentStep == Constructor);
+                        Text singleLineText = reader.ReadText(false);
                         AutoAdd(groupStack.Peek(), propName, singleLineText);
                         break;
                     default:

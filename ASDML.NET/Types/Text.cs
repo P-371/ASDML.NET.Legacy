@@ -14,15 +14,13 @@ namespace P371.ASDML.Types
         /// <returns>The given text is a Simple Text Literal or not</returns>
         public static bool IsSimple(string text)
         {
-            char[] disallowed = { '"', '(', ')', '[', ']', '{', '}' };
-            char[] disallowedFirst = { '@', '#', '+', '-', '.' };
-            if (text.Length == 0 || text[0].In(disallowedFirst) || char.IsWhiteSpace(text[0]))
+            if (text.Length == 0 || text[0].In("@#+-.") || char.IsWhiteSpace(text[0]))
             {
                 return false;
             }
             for (int i = 1; i < text.Length; i++)
             {
-                if (text[i].In(disallowed) || char.IsWhiteSpace(text[i]))
+                if (text[i].In("()[]{}") || char.IsWhiteSpace(text[i]))
                 {
                     return false;
                 }

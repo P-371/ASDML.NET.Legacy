@@ -14,7 +14,7 @@ namespace P371.ASDML.Tests
         Text t3 = s2;
 
         [Fact]
-        public void Test1()
+        public void TextTest1()
         {
             Assert.NotEqual(t1, t2);
             Assert.NotEqual(t1, t3);
@@ -22,7 +22,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test2()
+        public void TextTest2()
         {
             Assert.Equal<Text>(t1, s1);
             Assert.Equal<Text>(t2, s2);
@@ -30,7 +30,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test3()
+        public void TextTest3()
         {
             Assert.NotEqual<Text>("Test 1", t1);
             Assert.NotEqual<Text>("Test 2", t2);
@@ -38,7 +38,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test4()
+        public void TextTest4()
         {
             Assert.False(t1 == t2);
             Assert.False(t1 == t3);
@@ -46,7 +46,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test5()
+        public void TextTest5()
         {
             Assert.True(t1 != t2);
             Assert.True(t1 != t3);
@@ -54,7 +54,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test6()
+        public void TextTest6()
         {
             Assert.True(t1 == s1);
             Assert.True(t2 == s2);
@@ -62,7 +62,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test7()
+        public void TextTest7()
         {
             Assert.False(t1 == "Test 4");
             Assert.False(t2 == "Test 5");
@@ -70,7 +70,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test8()
+        public void TextTest8()
         {
             Assert.False(t1 != s1);
             Assert.False(t2 != s2);
@@ -78,7 +78,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test9()
+        public void TextTest9()
         {
             Assert.True(t1 != "Test 7");
             Assert.True(t2 != "Test 8");
@@ -86,7 +86,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test10()
+        public void TextTest10()
         {
             Parser parser = new Parser("\"This is a text\"");
             Group group = parser.Parse();
@@ -98,27 +98,73 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test11()
+        public void TextTest11()
         {
             Parser parser = new Parser("\"This is a text");
             Assert.Throws<EndOfStreamException>(parser.Parse);
         }
 
         [Fact]
-        public void Test12()
+        public void TextTest12()
         {
             Parser parser = new Parser("ASDML \"");
             Assert.Throws<EndOfStreamException>(parser.Parse);
         }
 
         [Fact]
-        public void Test13()
+        public void TextTest13()
         {
             Parser parser = new Parser("\"This is a\"text");
             UnexpectedCharacterException exception = Assert.Throws<UnexpectedCharacterException>(parser.Parse);
             Assert.Equal('t', exception.Character);
             Assert.Equal(1, exception.Line);
             Assert.Equal(12, exception.Column);
+        }
+
+        [Fact]
+        public void EscapeTest1()
+        {
+            Parser parser = new Parser("\"___\\\"_\\#_\\\\_\\0_\\a_\\b_\\f_\\n_\\r_\\t_\\v_\\x40_\\x23_\\x30_\\u0041_\\u1024___\"");
+            Group group = parser.Parse();
+            Assert.Single(group.NestedObjects);
+            Assert.Equal((Text)"___\"_#_\\_\0_\a_\b_\f_\n_\r_\t_\v_@_#_0_A_ဤ___", group.NestedObjects[0]);
+            Assert.Empty(group.Properties);
+            Assert.Empty(group.ConstructorParameters.NestedObjects);
+            Assert.Null(group.ID);
+        }
+
+        [Fact]
+        public void EscapeTest2()
+        {
+            Parser parser = new Parser("\"___\\?___\"");
+            UnexpectedCharacterException exception = Assert.Throws<UnexpectedCharacterException>(parser.Parse);
+            Assert.Equal('?', exception.Character);
+            Assert.Equal(1, exception.Line);
+            Assert.Equal(6, exception.Column);
+        }
+
+        [Fact]
+        public void EscapeTest3()
+        {
+            Parser parser = new Parser("\"___\\____\"");
+            UnexpectedCharacterException exception = Assert.Throws<UnexpectedCharacterException>(parser.Parse);
+            Assert.Equal('_', exception.Character);
+            Assert.Equal(1, exception.Line);
+            Assert.Equal(6, exception.Column);
+        }
+
+        [Fact]
+        public void EscapeTest4()
+        {
+            Parser parser = new Parser("\"___\\\"");
+            Assert.Throws<EndOfStreamException>(parser.Parse);
+        }
+
+        [Fact]
+        public void EscapeTest5()
+        {
+            Parser parser = new Parser("\"___\\");
+            Assert.Throws<EndOfStreamException>(parser.Parse);
         }
 
         [Fact]
@@ -137,12 +183,10 @@ namespace P371.ASDML.Tests
         public void SimpleTest2()
         {
             Parser parser = new Parser("x42@+.#-");
-            Group group = parser.Parse();
-            Assert.Single(group.NestedObjects);
-            Assert.Equal((SimpleText)"x42@+.#-", group.NestedObjects[0]);
-            Assert.Empty(group.Properties);
-            Assert.Empty(group.ConstructorParameters.NestedObjects);
-            Assert.Null(group.ID);
+            UnexpectedCharacterException exception = Assert.Throws<UnexpectedCharacterException>(parser.Parse);
+            Assert.Equal('@', exception.Character);
+            Assert.Equal(1, exception.Line);
+            Assert.Equal(4, exception.Column);
         }
 
         [Fact]

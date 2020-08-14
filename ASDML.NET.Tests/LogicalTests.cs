@@ -10,7 +10,7 @@ namespace P371.ASDML.Tests
         Logical l3 = false;
 
         [Fact]
-        public void Test1()
+        public void LogicalTest1()
         {
             Assert.NotEqual(l1, l2);
             Assert.NotEqual(l1, l3);
@@ -18,7 +18,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test2()
+        public void LogicalTest2()
         {
             Assert.Equal<Logical>(true, l1);
             Assert.Equal<Logical>(false, l2);
@@ -26,7 +26,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test3()
+        public void LogicalTest3()
         {
             Assert.NotEqual<Logical>(false, l1);
             Assert.NotEqual<Logical>(true, l2);
@@ -34,7 +34,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test4()
+        public void LogicalTest4()
         {
             Assert.False(l1 == l2);
             Assert.False(l1 == l3);
@@ -42,7 +42,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test5()
+        public void LogicalTest5()
         {
             Assert.True(l1 != l2);
             Assert.True(l1 != l3);
@@ -50,7 +50,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test6()
+        public void LogicalTest6()
         {
             Assert.True(l1 == true);
             Assert.True(l2 == false);
@@ -58,7 +58,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test7()
+        public void LogicalTest7()
         {
             Assert.False(l1 == false);
             Assert.False(l2 == true);
@@ -66,7 +66,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test8()
+        public void LogicalTest8()
         {
             Assert.False(l1 != true);
             Assert.False(l2 != false);
@@ -74,7 +74,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test9()
+        public void LogicalTest9()
         {
             Assert.True(l1 != false);
             Assert.True(l2 != true);

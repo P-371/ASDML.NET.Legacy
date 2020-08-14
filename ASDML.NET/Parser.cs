@@ -143,7 +143,7 @@ namespace P371.ASDML
                             Text text = reader.ReadText(true);
                             AutoAdd(groupStack.Peek(), propName, text);
                         }
-                        else if (reader.Peek().In('t', 'f', 'n')) // Logical / @null
+                        else if (reader.Peek().In("tfn")) // Logical / @null
                         {
                             var (expectedText, expectedValue) = reader.Peek() switch
                             {
@@ -269,7 +269,7 @@ namespace P371.ASDML
                         reader.SkipWhiteSpaces();
                         if (!reader.EndOfStream)
                         {
-                            if (reader.Peek().In('(', '#', '{'))
+                            if (reader.Peek().In("(#{"))
                             {
                                 Group group = new Group(simpleText);
                                 AutoAdd(groupStack.Peek(), propName, group);
@@ -281,7 +281,7 @@ namespace P371.ASDML
                         break;
                     case '"': // Text
                         EnsureGroupWritable(currentGroup);
-                        Text singleLineText = reader.ReadText(currentStep == Constructor);
+                        Text singleLineText = reader.ReadText(false);
                         AutoAdd(groupStack.Peek(), propName, singleLineText);
                         break;
                     default:

@@ -12,20 +12,15 @@ namespace P371.ASDML
     {
         private TextReader reader { get; }
 
-        internal bool EndObject
-        {
-            get
-            {
-                char[] allowedNext = { ']', '{', '}', '(', ')' };
-                return EndOfStream || char.IsWhiteSpace(Peek()) || Peek().In(allowedNext);
-            }
-        }
+        internal bool EndObject => EndOfStream || char.IsWhiteSpace(Peek()) || Peek().In("]{}()");
 
         internal bool WhiteSpaceNext => char.IsWhiteSpace(Peek());
 
         internal UnexpectedCharacterException UnexpectedCharacter => new UnexpectedCharacterException(Peek(), Line, Column);
 
-        public bool EndOfStream => Peek() == unchecked((char)-1);
+        public const char EndOfStreamChar = unchecked((char)-1);
+
+        public bool EndOfStream => Peek() == EndOfStreamChar;
 
         public int Line { get; private set; } = 1;
 
@@ -71,6 +66,61 @@ namespace P371.ASDML
             return builder.ToString();
         }
 
+        private char ReadEscaped()
+        {
+            EnsureNotEndOfStream();
+            if (Peek() != '\\')
+            {
+                throw UnexpectedCharacter;
+            }
+            Read(); // '\'
+            EnsureNotEndOfStream();
+            return Peek() switch
+            {
+                var v when v.In("\"#\\0abfnrtv") => ReadSingleChar(),
+                var v when v.In("ux") => ReadHexChars(Read()),
+                _ => throw UnexpectedCharacter
+            };
+
+            char ReadSingleChar()
+            {
+                char peeked = Peek() switch
+                {
+                    '"' => '"',
+                    '#' => '#',
+                    '\\' => '\\',
+                    '0' => '\0',
+                    'a' => '\a',
+                    'b' => '\b',
+                    'f' => '\f',
+                    'n' => '\n',
+                    'r' => '\r',
+                    't' => '\t',
+                    'v' => '\v',
+                    _ => throw UnexpectedCharacter
+                };
+                Read(); // Read after throwing exception so the char and the position will be correct
+                return peeked;
+            }
+
+            char ReadHexChars(char mode)
+            {
+                Func<char, bool> allowed = c => char.IsDigit(c) || c.In("AaBbCcDdEeFf");
+                int length = mode == 'u' ? 4 : 2;
+                char[] chars = new char[length];
+                for (int i = 0; i < length; i++)
+                {
+                    EnsureNotEndOfStream();
+                    if (!allowed(Peek()))
+                    {
+                        throw UnexpectedCharacter;
+                    }
+                    chars[i] = Read();
+                }
+                return (char)Convert.ToInt32(new string(chars), 16);
+            }
+        }
+
         public char Read()
         {
             char read = (char)reader.Read();
@@ -86,21 +136,27 @@ namespace P371.ASDML
             return read;
         }
 
-        public (string text, char hit) ReadUntil(Func<char, bool> continueReading)
+        private (string text, char hit) ReadUntil(Func<char, bool, bool> continueWhile, bool parseEscaped)
         {
-            if (continueReading == null)
+            if (continueWhile == null)
             {
-                throw new ArgumentNullException(nameof(continueReading));
+                throw new ArgumentNullException(nameof(continueWhile));
             }
             StringBuilder builder = new StringBuilder();
             while (true)
             {
-                char peek = Peek();
-                if (EndOfStream || !continueReading(peek))
+                char peeked = Peek();
+                bool escapedRead = false;
+                if (parseEscaped && peeked == '\\')
                 {
-                    return (text: builder.ToString(), hit: peek);
+                    peeked = ReadEscaped();
+                    escapedRead = true;
                 }
-                builder.Append(Read());
+                if (EndOfStream || !continueWhile(peeked, escapedRead))
+                {
+                    return (text: builder.ToString(), hit: EndOfStream ? EndOfStreamChar : peeked);
+                }
+                builder.Append(escapedRead ? peeked : Read());
             }
         }
 
@@ -108,7 +164,7 @@ namespace P371.ASDML
         {
             StringBuilder builder = new StringBuilder();
             EnsureNotEndOfStream();
-            if (Peek().In('+', '-'))
+            if (Peek().In("+-"))
             {
                 builder.Append(Read()); // sign
             }
@@ -117,7 +173,7 @@ namespace P371.ASDML
             {
                 return builder.ToString();
             }
-            if (!Peek().In('.', 'E', 'e'))
+            if (!Peek().In(".Ee"))
             {
                 throw UnexpectedCharacter;
             }
@@ -130,13 +186,13 @@ namespace P371.ASDML
             {
                 return builder.ToString();
             }
-            if (!Peek().In('E', 'e'))
+            if (!Peek().In("Ee"))
             {
                 throw UnexpectedCharacter;
             }
             builder.Append(Read()); // 'E' || 'e'
             EnsureNotEndOfStream();
-            if (!Peek().In('+', '-'))
+            if (!Peek().In("+-"))
             {
                 throw UnexpectedCharacter;
             }
@@ -155,7 +211,7 @@ namespace P371.ASDML
             if (Peek() == '"')
             {
                 Read(); // Quotation mark
-                var (text, hit) = ReadUntil(c => c == '\n' ? multiLine : c != '"');
+                var (text, hit) = ReadUntil((c, escapedRead) => escapedRead ? true : (c == '\n' ? multiLine : c != '"'), true);
                 if (hit != '"')
                 {
                     throw EndOfStream ? new EndOfStreamException() : (Exception)UnexpectedCharacter;
@@ -176,9 +232,9 @@ namespace P371.ASDML
         public SimpleText ReadSimpleText()
         {
             EnsureNotEndOfStream();
-            char[] disallowed = { '"', '(', ')', '[', ']', '{', '}' };
-            char[] disallowedFirst = { '@', '#', '+', '-', '.' };
-            if (EndObject || Peek().In(disallowedFirst) || char.IsDigit(Peek()))
+            Func<char, bool> allowed = c => char.IsLetterOrDigit(c) || c.In("._+-");
+            Func<char, bool> allowedFirst = c => char.IsLetter(c) || c.In("_");
+            if (EndObject || !allowedFirst(Peek()))
             {
                 throw UnexpectedCharacter;
             }
@@ -187,7 +243,7 @@ namespace P371.ASDML
             {
                 builder.Append(Read());
             }
-            while (!EndObject && !Peek().In(disallowed));
+            while (!EndObject && allowed(Peek()));
             if (!EndObject)
             {
                 throw UnexpectedCharacter;
@@ -197,7 +253,7 @@ namespace P371.ASDML
 
         public char Peek() => (char)reader.Peek();
 
-        public void SkipWhiteSpaces() => ReadUntil(c => char.IsWhiteSpace(c));
+        public void SkipWhiteSpaces() => ReadUntil((c, _) => char.IsWhiteSpace(c), false);
 
         public void Dispose() => reader.Dispose();
     }

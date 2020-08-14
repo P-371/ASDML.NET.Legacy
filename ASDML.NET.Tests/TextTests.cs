@@ -137,12 +137,10 @@ namespace P371.ASDML.Tests
         public void SimpleTest2()
         {
             Parser parser = new Parser("x42@+.#-");
-            Group group = parser.Parse();
-            Assert.Single(group.NestedObjects);
-            Assert.Equal((SimpleText)"x42@+.#-", group.NestedObjects[0]);
-            Assert.Empty(group.Properties);
-            Assert.Empty(group.ConstructorParameters.NestedObjects);
-            Assert.Null(group.ID);
+            UnexpectedCharacterException exception = Assert.Throws<UnexpectedCharacterException>(parser.Parse);
+            Assert.Equal('@', exception.Character);
+            Assert.Equal(1, exception.Line);
+            Assert.Equal(4, exception.Column);
         }
 
         [Fact]

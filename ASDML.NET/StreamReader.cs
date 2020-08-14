@@ -176,9 +176,11 @@ namespace P371.ASDML
         public SimpleText ReadSimpleText()
         {
             EnsureNotEndOfStream();
-            char[] disallowed = { '"', '(', ')', '[', ']', '{', '}' };
-            char[] disallowedFirst = { '@', '#', '+', '-', '.' };
-            if (EndObject || Peek().In(disallowedFirst) || char.IsDigit(Peek()))
+            char[] allowedAdditions = { '.', '_', '+', '-' };
+            char[] allowedFirstAdditions = { '_' };
+            Func<char, bool> allowed = c => char.IsLetterOrDigit(c) || c.In(allowedAdditions);
+            Func<char, bool> allowedFirst = c => char.IsLetter(c) || c.In(allowedFirstAdditions);
+            if (EndObject || !allowedFirst(Peek()))
             {
                 throw UnexpectedCharacter;
             }
@@ -187,7 +189,7 @@ namespace P371.ASDML
             {
                 builder.Append(Read());
             }
-            while (!EndObject && !Peek().In(disallowed));
+            while (!EndObject && allowed(Peek()));
             if (!EndObject)
             {
                 throw UnexpectedCharacter;

@@ -28,7 +28,7 @@ jobs:
     name: Create GitHub Tag
     runs-on: ubuntu-latest
     needs: [ check ]
-    if: github.event.pull_request.merged && !needs.check.outputs.exists
+    if: github.event.pull_request.merged && needs.check.outputs.exists == false
 
     steps:
     - uses: actions/checkout@v2

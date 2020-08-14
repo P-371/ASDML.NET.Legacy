@@ -13,27 +13,27 @@ jobs:
 
     outputs:
       version: ${{ steps.get_version.outputs.version }}
+      exists: ${{ steps.check.outputs.exists }}
 
     steps:
     - uses: actions/checkout@v2
     - name: Get version
       id: get_version
-      run: echo ::set-output name=version::`cat ASDML.NET/ASDML.NET.csproj | sed -nE "s/[[:blank:]]*<Version>(.*)<\/Version>[[:blank:]]*/v\1/p"`
+      run: echo ::set-output name=version::$(cat ASDML.NET/ASDML.NET.csproj | sed -nE "s/[[:blank:]]*<Version>(.*)<\/Version>[[:blank:]]*/v\1/p")
     - name: Checks if tag exists
-      run: git tag --list | egrep -q "^${{ steps.get_version.outputs.version }}$" && exit 1 || exit 0
-    
+      id: check
+      run: git tag --list | egrep -q "^${{ steps.get_version.outputs.version }}$" && echo ::set-output name=exists::true || echo ::set-output name=exists::false
+
   tag:
     name: Create GitHub Tag
     runs-on: ubuntu-latest
     needs: [ check ]
-    if: github.event.pull_request.merged
+    if: github.event.pull_request.merged && !needs.check.outputs.exists
 
     steps:
     - uses: actions/checkout@v2
-    - name: Push tag to GitHub
-      uses: laputansoft/github-tag-action@v4.6
-      with:
-        github_token: $${{ secrets.GITHUB_TOKEN }}
+    - name: Push Tag to GitHub
+      uses: tvdias/github-tagger@v0.0.2
+      env:
+        repo-token: $${{ secrets.GITHUB_TOKEN }}
         tag: ${{ needs.check.outputs.version }}
-        default_bump: false
-        create_annotated_tag: true

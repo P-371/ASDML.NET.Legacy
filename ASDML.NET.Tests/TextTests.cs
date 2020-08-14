@@ -122,6 +122,52 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
+        public void EscapeTest1()
+        {
+            Parser parser = new Parser("\"___\\\"_\\#_\\\\_\\0_\\a_\\b_\\f_\\n_\\r_\\t_\\v_\\x40_\\x23_\\x30_\\u0041_\\u1024___\"");
+            Group group = parser.Parse();
+            Assert.Single(group.NestedObjects);
+            Assert.Equal((Text)"___\"_#_\\_\0_\a_\b_\f_\n_\r_\t_\v_@_#_0_A_ဤ___", group.NestedObjects[0]);
+            Assert.Empty(group.Properties);
+            Assert.Empty(group.ConstructorParameters.NestedObjects);
+            Assert.Null(group.ID);
+        }
+
+        [Fact]
+        public void EscapeTest2()
+        {
+            Parser parser = new Parser("\"___\\?___\"");
+            UnexpectedCharacterException exception = Assert.Throws<UnexpectedCharacterException>(parser.Parse);
+            Assert.Equal('?', exception.Character);
+            Assert.Equal(1, exception.Line);
+            Assert.Equal(6, exception.Column);
+        }
+
+        [Fact]
+        public void EscapeTest3()
+        {
+            Parser parser = new Parser("\"___\\____\"");
+            UnexpectedCharacterException exception = Assert.Throws<UnexpectedCharacterException>(parser.Parse);
+            Assert.Equal('_', exception.Character);
+            Assert.Equal(1, exception.Line);
+            Assert.Equal(6, exception.Column);
+        }
+
+        [Fact]
+        public void EscapeTest4()
+        {
+            Parser parser = new Parser("\"___\\\"");
+            Assert.Throws<EndOfStreamException>(parser.Parse);
+        }
+
+        [Fact]
+        public void EscapeTest5()
+        {
+            Parser parser = new Parser("\"___\\");
+            Assert.Throws<EndOfStreamException>(parser.Parse);
+        }
+
+        [Fact]
         public void SimpleTest1()
         {
             Parser parser = new Parser("Hello");

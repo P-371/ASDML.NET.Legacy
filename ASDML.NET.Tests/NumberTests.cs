@@ -12,7 +12,7 @@ namespace P371.ASDML.Tests
         Number n3 = 7;
 
         [Fact]
-        public void Test1()
+        public void NumberTest1()
         {
             Assert.NotEqual(n1, n2);
             Assert.NotEqual(n1, n3);
@@ -20,7 +20,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test2()
+        public void NumberTest2()
         {
             Assert.Equal<Number>(2, n1);
             Assert.Equal<Number>(7, n2);
@@ -28,7 +28,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test3()
+        public void NumberTest3()
         {
             Assert.NotEqual<Number>(7, n1);
             Assert.NotEqual<Number>(2, n2);
@@ -36,7 +36,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test4()
+        public void NumberTest4()
         {
             Assert.False(n1 == n2);
             Assert.False(n1 == n3);
@@ -44,7 +44,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test5()
+        public void NumberTest5()
         {
             Assert.True(n1 != n2);
             Assert.True(n1 != n3);
@@ -52,7 +52,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test6()
+        public void NumberTest6()
         {
             Assert.True(n1 == 2);
             Assert.False(n1 == 7);
@@ -61,7 +61,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test7()
+        public void NumberTest7()
         {
             Assert.True(n1 == 2.0);
             Assert.False(n1 == 7.0);
@@ -70,7 +70,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test8()
+        public void NumberTest8()
         {
             Assert.True(n1 == 2.0f);
             Assert.False(n1 == 7.0f);
@@ -79,7 +79,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test9()
+        public void NumberTest9()
         {
             Assert.True(n1 <= 2.0);
             Assert.True(n1 >= 2.0);
@@ -88,7 +88,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test10()
+        public void NumberTest10()
         {
             Assert.True(n1 <= 7.0);
             Assert.False(n1 >= 7.0);
@@ -97,7 +97,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test11()
+        public void NumberTest11()
         {
             Assert.False(n1 <= 0.0);
             Assert.True(n1 >= 0.0);
@@ -106,7 +106,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test12()
+        public void NumberTest12()
         {
 #pragma warning disable CS1718
             Assert.False(n1 < n1);
@@ -119,7 +119,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test13()
+        public void NumberTest13()
         {
             Parser parser = new Parser("7");
             Group group = parser.Parse();
@@ -131,7 +131,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test14()
+        public void NumberTest14()
         {
             Parser parser = new Parser("-2");
             Group group = parser.Parse();
@@ -143,7 +143,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test15()
+        public void NumberTest15()
         {
             Parser parser = new Parser("2.71");
             Group group = parser.Parse();
@@ -155,7 +155,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test16()
+        public void NumberTest16()
         {
             Parser parser = new Parser("-3.14");
             Group group = parser.Parse();
@@ -167,7 +167,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test17()
+        public void NumberTest17()
         {
             Parser parser = new Parser("6.67E-11");
             Group group = parser.Parse();
@@ -179,7 +179,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test18()
+        public void NumberTest18()
         {
             Parser parser = new Parser("+6E+23");
             Group group = parser.Parse();
@@ -191,7 +191,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test19()
+        public void NumberTest19()
         {
             Parser parser = new Parser("+-6.67E-11");
             UnexpectedCharacterException exception = Assert.Throws<UnexpectedCharacterException>(parser.Parse);
@@ -201,7 +201,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test20()
+        public void NumberTest20()
         {
             Parser parser = new Parser("++6.67E-11");
             UnexpectedCharacterException exception = Assert.Throws<UnexpectedCharacterException>(parser.Parse);
@@ -211,7 +211,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test21()
+        public void NumberTest21()
         {
             Parser parser = new Parser("-+6.67E-11");
             UnexpectedCharacterException exception = Assert.Throws<UnexpectedCharacterException>(parser.Parse);
@@ -221,7 +221,7 @@ namespace P371.ASDML.Tests
         }
         
         [Fact]
-        public void Test22()
+        public void NumberTest22()
         {
             Parser parser = new Parser("--6.67E-11");
             UnexpectedCharacterException exception = Assert.Throws<UnexpectedCharacterException>(parser.Parse);
@@ -231,7 +231,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test23()
+        public void NumberTest23()
         {
             Parser parser = new Parser("6.E-11");
             UnexpectedCharacterException exception = Assert.Throws<UnexpectedCharacterException>(parser.Parse);
@@ -241,7 +241,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test24()
+        public void NumberTest24()
         {
             Parser parser = new Parser("6.67E11");
             UnexpectedCharacterException exception = Assert.Throws<UnexpectedCharacterException>(parser.Parse);
@@ -251,35 +251,35 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test25()
+        public void NumberTest25()
         {
             Parser parser = new Parser("6.");
             Assert.Throws<EndOfStreamException>(parser.Parse);
         }
 
         [Fact]
-        public void Test26()
+        public void NumberTest26()
         {
             Parser parser = new Parser("6.67E+");
             Assert.Throws<EndOfStreamException>(parser.Parse);
         }        
 
         [Fact]
-        public void Test27()
+        public void NumberTest27()
         {
             Parser parser = new Parser("6.67E-");
             Assert.Throws<EndOfStreamException>(parser.Parse);
         }
 
         [Fact]
-        public void Test28()
+        public void NumberTest28()
         {
             Parser parser = new Parser("6.67E");
             Assert.Throws<EndOfStreamException>(parser.Parse);
         }
 
         [Fact]
-        public void Test29()
+        public void NumberTest29()
         {
             Parser parser = new Parser("6.67E--11");
             UnexpectedCharacterException exception = Assert.Throws<UnexpectedCharacterException>(parser.Parse);
@@ -289,7 +289,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test30()
+        public void NumberTest30()
         {
             Parser parser = new Parser("6.67E-+11");
             UnexpectedCharacterException exception = Assert.Throws<UnexpectedCharacterException>(parser.Parse);
@@ -299,7 +299,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test31()
+        public void NumberTest31()
         {
             Parser parser = new Parser("6.67E+-11");
             UnexpectedCharacterException exception = Assert.Throws<UnexpectedCharacterException>(parser.Parse);
@@ -309,7 +309,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test32()
+        public void NumberTest32()
         {
             Parser parser = new Parser("6.67E++11");
             UnexpectedCharacterException exception = Assert.Throws<UnexpectedCharacterException>(parser.Parse);
@@ -319,7 +319,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test33()
+        public void NumberTest33()
         {
             Parser parser = new Parser("-.67E-11");
             UnexpectedCharacterException exception = Assert.Throws<UnexpectedCharacterException>(parser.Parse);
@@ -329,7 +329,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test34()
+        public void NumberTest34()
         {
             Parser parser = new Parser("6.67X-11");
             UnexpectedCharacterException exception = Assert.Throws<UnexpectedCharacterException>(parser.Parse);
@@ -339,7 +339,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test35()
+        public void NumberTest35()
         {
             Parser parser = new Parser("6.67.11");
             UnexpectedCharacterException exception = Assert.Throws<UnexpectedCharacterException>(parser.Parse);
@@ -349,7 +349,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test36()
+        public void NumberTest36()
         {
             Parser parser = new Parser("6. ");
             UnexpectedCharacterException exception = Assert.Throws<UnexpectedCharacterException>(parser.Parse);
@@ -359,7 +359,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test37()
+        public void NumberTest37()
         {
             Parser parser = new Parser("6.x");
             UnexpectedCharacterException exception = Assert.Throws<UnexpectedCharacterException>(parser.Parse);
@@ -369,7 +369,7 @@ namespace P371.ASDML.Tests
         }
 
         [Fact]
-        public void Test38()
+        public void NumberTest38()
         {
             Parser parser = new Parser("6.67E-11X");
             UnexpectedCharacterException exception = Assert.Throws<UnexpectedCharacterException>(parser.Parse);

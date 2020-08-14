@@ -12,14 +12,7 @@ namespace P371.ASDML
     {
         private TextReader reader { get; }
 
-        internal bool EndObject
-        {
-            get
-            {
-                char[] allowedNext = { ']', '{', '}', '(', ')' };
-                return EndOfStream || char.IsWhiteSpace(Peek()) || Peek().In(allowedNext);
-            }
-        }
+        internal bool EndObject => EndOfStream || char.IsWhiteSpace(Peek()) || Peek().In("]{}()");
 
         internal bool WhiteSpaceNext => char.IsWhiteSpace(Peek());
 
@@ -108,7 +101,7 @@ namespace P371.ASDML
         {
             StringBuilder builder = new StringBuilder();
             EnsureNotEndOfStream();
-            if (Peek().In('+', '-'))
+            if (Peek().In("+-"))
             {
                 builder.Append(Read()); // sign
             }
@@ -117,7 +110,7 @@ namespace P371.ASDML
             {
                 return builder.ToString();
             }
-            if (!Peek().In('.', 'E', 'e'))
+            if (!Peek().In(".Ee"))
             {
                 throw UnexpectedCharacter;
             }
@@ -130,13 +123,13 @@ namespace P371.ASDML
             {
                 return builder.ToString();
             }
-            if (!Peek().In('E', 'e'))
+            if (!Peek().In("Ee"))
             {
                 throw UnexpectedCharacter;
             }
             builder.Append(Read()); // 'E' || 'e'
             EnsureNotEndOfStream();
-            if (!Peek().In('+', '-'))
+            if (!Peek().In("+-"))
             {
                 throw UnexpectedCharacter;
             }
@@ -176,10 +169,8 @@ namespace P371.ASDML
         public SimpleText ReadSimpleText()
         {
             EnsureNotEndOfStream();
-            char[] allowedAdditions = { '.', '_', '+', '-' };
-            char[] allowedFirstAdditions = { '_' };
-            Func<char, bool> allowed = c => char.IsLetterOrDigit(c) || c.In(allowedAdditions);
-            Func<char, bool> allowedFirst = c => char.IsLetter(c) || c.In(allowedFirstAdditions);
+            Func<char, bool> allowed = c => char.IsLetterOrDigit(c) || c.In("._+-");
+            Func<char, bool> allowedFirst = c => char.IsLetter(c) || c.In("_");
             if (EndObject || !allowedFirst(Peek()))
             {
                 throw UnexpectedCharacter;
